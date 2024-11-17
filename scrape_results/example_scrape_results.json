@@ -1,6 +1,7 @@
 {
-    "nytimes": [
-        {
+    "nytimes": {
+        "source_type": "news",
+        "cryptocurrencies": {
             "Bitcoin": [
                 {
                     "title": "Bitcoin blah blah ",
@@ -30,9 +31,10 @@
                 }
             ]
         }
-    ],
-    "wsj": [
-        {
+    },
+    "wsj": {
+        "source_type": "news",
+        "cryptocurrencies": {
             "Bitcoin": [
                 {
                     "title": "Bitcoin blah blah ",
@@ -62,9 +64,10 @@
                 }
             ]
         }
-    ],
-    "reddit": [
-        {
+    },
+    "reddit": {
+        "source_type": "social_media",
+        "cryptocurrencies": {
             "Bitcoin": [
                 {
                     "title": "Bitcoin blah blah ",
@@ -94,5 +97,5 @@
                 }
             ]
         }
-    ]
+    }
 }
