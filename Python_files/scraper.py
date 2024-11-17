@@ -3,7 +3,8 @@ from datetime import datetime, timedelta
 from typing import Dict, List
 import json
 
-sources = ["source1", "source2", "source3"]
+news_sources = ["nytimes", "wsj"]
+social_media_sources = ["reddit"]
 
 # Define the folder to store the results
 RESULTS_FOLDER = os.path.join(os.path.dirname(__file__), "../scrape_results/")
@@ -23,12 +24,19 @@ def collect_and_combine_news(date: str):
     """
     combined_data = {}
 
-    for source in sources:
+    for source in news_sources+social_media_sources:
         # Fetch data for each source
-        data = fetch_news_data(source, date)
+        source_data = fetch_news_data(source, date)
+
+        # Detailing source type
+        if source in news_sources:
+            source_data["source_type"] = "news"
+        elif source in social_media_sources:
+            source_data["source_type"] = "social_media"
 
         # Merge the news data from all sources
-        combined_data.update(data)
+        combined_data.update(source_data)
+
 
     # Write the combined data to the output JSON file
     output_file = os.path.join(RESULTS_FOLDER, f"{date}.json")
@@ -45,14 +53,44 @@ def fetch_news_data(source: str, date: str) -> Dict[str, List[str]]:
     data = {}
 
     if source == "source1":
-        # Fetch data from source1
-        data = {"source1": [f"News from {source} on {date}"]}
+        # Fetch data from source1 - THIS IS FORMAT RETURNED BY SCRAPER FOR EACH SOURCE
+        data[source]["cryptocurrencies"] = {
+            "Bitcoin": [
+                {
+                    "title": "Bitcoin blah blah ",
+                    "date": "2021-06-25",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": "good - i like bitcoin"
+                },
+                {
+                    "title": "Bitcoin blah blah blah",
+                    "date": "2021-06-25",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": "very good"
+                }
+            ],
+            "Ethereum": [
+                {
+                    "title": "Ethereum blah blah",
+                    "date": "2021-06-25",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": "i love ethereum"
+                },
+                {
+                    "title": "Ethereum blah blah",
+                    "date": "2021-06-25",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": "ethereum is all right, i like bitcoin more"
+                }
+            ]
+        }
     elif source == "source2":
         # Fetch data from source2
-        data = {"source2": [f"News from {source} on {date}"]}
+         data[source]["cryptocurrencies"] = {}
     elif source == "source3":
         # Fetch data from source3
-        data = {"source3": [f"News from {source} on {date}"]}
+        data[source]["cryptocurrencies"] = {}
+
 
     return data
 
