@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import CryptoButtons from './CryptoButtons'
 import './App.css'
 
 function App() {
@@ -6,7 +7,13 @@ function App() {
   return (
     <>
       <div>
-        Crypto Board Baby
+        Crypto Board
+      </div>
+      <div>
+        <CryptoButtons/>
+      </div>
+      <div>
+        FootNote
       </div>
     </>
   )
