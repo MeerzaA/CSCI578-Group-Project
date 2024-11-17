@@ -1,0 +1,98 @@
+{
+    "nytimes": [
+        {
+            "Bitcoin": [
+                {
+                    "title": "Bitcoin blah blah ",
+                    "date": "2021-06-25",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": ""
+                },
+                {
+                    "title": "Bitcoin blah blah blah",
+                    "date": "2021-06-25",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": ""
+                }
+            ],
+            "Ethereum": [
+                {
+                    "title": "Ethereum blah blah",
+                    "date": "2021-06-25",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": ""
+                },
+                {
+                    "title": "Ethereum blah blah",
+                    "date": "2021-06-25",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": ""
+                }
+            ]
+        }
+    ],
+    "wsj": [
+        {
+            "Bitcoin": [
+                {
+                    "title": "Bitcoin blah blah ",
+                    "date": "2021-06-25",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": ""
+                },
+                {
+                    "title": "Bitcoin blah blah blah",
+                    "date": "2021-06-25",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": ""
+                }
+            ],
+            "Ethereum": [
+                {
+                    "title": "Ethereum blah blah",
+                    "date": "2021-06-25",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": ""
+                },
+                {
+                    "title": "Ethereum blah blah",
+                    "date": "2021-06-25",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": ""
+                }
+            ]
+        }
+    ],
+    "reddit": [
+        {
+            "Bitcoin": [
+                {
+                    "title": "Bitcoin blah blah ",
+                    "date": "2021-06-25",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": ""
+                },
+                {
+                    "title": "Bitcoin blah blah blah",
+                    "date": "2021-06-25",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": ""
+                }
+            ],
+            "Ethereum": [
+                {
+                    "title": "Ethereum blah blah",
+                    "date": "2021-06-25",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": ""
+                },
+                {
+                    "title": "Ethereum blah blah",
+                    "date": "2021-06-25",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": ""
+                }
+            ]
+        }
+    ]
+}
