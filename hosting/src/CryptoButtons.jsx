@@ -1,5 +1,7 @@
 import CryptoButton from "./CryptoButton"
 
+//TODO: Grab Name and sentiment from FireBase
+
 const CryptoButtons = () => {
   return (
     <>

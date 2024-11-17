@@ -1,11 +1,19 @@
-import React from 'react'
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const CryptoButton = (props) => {
+  const navigate = useNavigate();
+  const handleButtonClick = () => {
+    navigate(`/${props.name}`);
+  };
+
   return (
     <>
-        <div>{props.name} {props.sentScore}</div>
+      <button onClick={handleButtonClick}>
+        {props.name} {props.sentScore}
+      </button>
     </>
-  )
-}
+  );
+};
 
-export default CryptoButton
+export default CryptoButton;
