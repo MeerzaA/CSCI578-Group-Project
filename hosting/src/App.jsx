@@ -1,20 +1,20 @@
-import { useState } from 'react'
-import CryptoButtons from './CryptoButtons'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import CryptoPage from './CryptoPage';
 import './App.css'
+import Home from './Home';
 
 function App() {
 
   return (
     <>
-      <div>
-        Crypto Board
-      </div>
-      <div>
-        <CryptoButtons/>
-      </div>
-      <div>
-        FootNote
-      </div>
+      <Router>
+        <div>
+          <Routes>
+            <Route path="/" element={<Home/>} />
+            <Route path="/:name" element={<CryptoPage />} />
+          </Routes>
+        </div>
+      </Router>
     </>
   )
 }
