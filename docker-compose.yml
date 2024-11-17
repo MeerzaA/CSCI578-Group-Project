@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  csci578groupproject:
+    image: csci578groupproject
+    build:
+      context: .
+      dockerfile: ./Dockerfile
