@@ -1,6 +1,5 @@
 import scrapy
 
-
 class BinsiderspriderSpider(scrapy.Spider):
     
     name = "BInsiderSprider"
@@ -26,3 +25,15 @@ class BinsiderspriderSpider(scrapy.Spider):
                 'name': name, 
                 'url': full_url
             }
+           
+            yield response.follow(full_url, self.parse_details)
+
+    def parse_details(self, response):
+      
+        content = response.css('div.article-content::text').get()
+        yield {
+            'content': content
+        }
+
+import scrapy
+
