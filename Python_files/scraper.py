@@ -53,7 +53,9 @@ def fetch_news_data(source: str, date: str) -> Dict[str, List[str]]:
     data = {}
 
     if source == "source1":
-        # Fetch data from source1 - THIS IS FORMAT RETURNED BY SCRAPER FOR EACH SOURCE
+        # data[source]["cryptocurrencies"] = fetch_data_from_source1(date)- THIS IS HOW TO FETCH DATA FROM SOURCE
+        
+        # Fetch data from source1 - THIS IS FORMAT RETURNED BY SCRAPER FOR EACH SOURCE (fetch_data_from_source1)
         data[source]["cryptocurrencies"] = {
             "Bitcoin": [
                 {
@@ -84,12 +86,12 @@ def fetch_news_data(source: str, date: str) -> Dict[str, List[str]]:
                 }
             ]
         }
-    elif source == "source2":
-        # Fetch data from source2
-         data[source]["cryptocurrencies"] = {}
-    elif source == "source3":
-        # Fetch data from source3
-        data[source]["cryptocurrencies"] = {}
+    # elif source == "source2":
+    #     # Fetch data from source2
+    #      data[source]["cryptocurrencies"] = {}
+    # elif source == "source3":
+    #     # Fetch data from source3
+    #     data[source]["cryptocurrencies"] = {}
 
 
     return data
