@@ -1,0 +1,101 @@
+{
+    "nytimes": {
+        "source_type": "news",
+        "cryptocurrencies": {
+            "Bitcoin": [
+                {
+                    "title": "Bitcoin blah blah ",
+                    "date": "06-25-2021",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": "good - i like bitcoin"
+                },
+                {
+                    "title": "Bitcoin blah blah blah",
+                    "date": "06-25-2021",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": "very good"
+                }
+            ],
+            "Ethereum": [
+                {
+                    "title": "Ethereum blah blah",
+                    "date": "06-25-2021",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": "i love ethereum"
+                },
+                {
+                    "title": "Ethereum blah blah",
+                    "date": "06-25-2021",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": "ethereum is all right, i like bitcoin more"
+                }
+            ]
+        }
+    },
+    "wsj": {
+        "source_type": "news",
+        "cryptocurrencies": {
+            "Bitcoin": [
+                {
+                    "title": "Bitcoin blah blah ",
+                    "date": "06-25-2021",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": "good - i like bitcoin"
+                },
+                {
+                    "title": "Bitcoin blah blah blah",
+                    "date": "06-25-2021",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": "very good"
+                }
+            ],
+            "Ethereum": [
+                {
+                    "title": "Ethereum blah blah",
+                    "date": "06-25-2021",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": "i love ethereum"
+                },
+                {
+                    "title": "Ethereum blah blah",
+                    "date": "06-25-2021",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": "ethereum is all right, i like bitcoin more"
+                }
+            ]
+        }
+    },
+    "reddit": {
+        "source_type": "social_media",
+        "cryptocurrencies": {
+            "Bitcoin": [
+                {
+                    "title": "Bitcoin blah blah ",
+                    "date": "06-25-2021",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": "good - i like bitcoin"
+                },
+                {
+                    "title": "Bitcoin blah blah blah",
+                    "date": "06-25-2021",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": "very good"
+                }
+            ],
+            "Ethereum": [
+                {
+                    "title": "Ethereum blah blah",
+                    "date": "06-25-2021",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": "i love ethereum"
+                },
+                {
+                    "title": "Ethereum blah blah",
+                    "date": "06-25-2021",
+                    "url": "https://www.nytimes.com/2021/06/25/technology/bitcoin-cryptocurrency.html",
+                    "text": "ethereum is all right, i like bitcoin more"
+                }
+            ]
+        }
+    }
+}
