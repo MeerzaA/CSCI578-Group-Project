@@ -1,9 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Graph from "./Graph";
+import fbapp from "./creds"; // Assuming the correct path to your configuration file
+import { getDatabase, ref, onValue } from "firebase/database";
 //TODO: Grab Graph Data Here (frequency from News, Frequency from Social Media, Sentiment over Time)
 
 const CryptoPage = () => {
+  const { name } = useParams();
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    // Initialize the Firebase database with the provided configuration
+    const database = getDatabase(fbapp);
+
+    // Reference to the specific collection in the database
+    const collectionRef = ref(database, name);
+
+    // Function to fetch data from the database
+    const fetchData = () => {
+      // Listen for changes in the collection
+      onValue(collectionRef, (snapshot) => {
+        const dataItem = snapshot.val();
+        // Check if dataItem exists
+        if (dataItem) {
+          // Convert the object values into an array
+          const displayItem = Object.entries(dataItem);
+          console.log(displayItem)
+          setData(displayItem);
+        }
+      });
+    };
+
+    // Fetch data when the component mounts
+    fetchData();
+  }, []);
+
   const news = {
     title: {
       text: "News Impressions",
@@ -1543,11 +1575,17 @@ const CryptoPage = () => {
     ],
   };
 
-  const { name } = useParams();
-
   return (
     <>
       <div>{name}</div>
+      <div>
+        <h1>Data from database:</h1>
+        <ul>
+          {data.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </ul>
+      </div>
       <Graph options={news} />
       <Graph options={social_media} />
       <Graph options={sentiment} />
