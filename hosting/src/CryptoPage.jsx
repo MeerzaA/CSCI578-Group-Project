@@ -16,10 +16,12 @@ const CryptoPage = () => {
 
     // Reference to the specific collection in the database
     const collectionRef = ref(database, name);
+    
 
     // Function to fetch data from the database
     const fetchData = () => {
       // Listen for changes in the collection
+      
       onValue(collectionRef, (snapshot) => {
         const dataItem = snapshot.val();
         // Check if dataItem exists
@@ -27,7 +29,10 @@ const CryptoPage = () => {
           // Convert the object values into an array
           const displayItem = Object.entries(dataItem);
           console.log(displayItem)
-          setData(displayItem);
+
+          console.log(displayItem[0][1]['Sentiment'])
+          // console.log(displayItem["1"]["1"])
+          setData([displayItem[0][1]['Sentiment']]);
         }
       });
     };

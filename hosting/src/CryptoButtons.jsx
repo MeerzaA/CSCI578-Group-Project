@@ -5,8 +5,8 @@ import CryptoButton from "./CryptoButton"
 const CryptoButtons = () => {
   return (
     <>
-      <CryptoButton name="BitCoin" sentScore="6"/>
-      <CryptoButton name="DogeCoin" sentScore="1"/>
+      <CryptoButton name="Bitcoin" sentScore="6"/>
+      <CryptoButton name="Ethereum" sentScore="1"/>
     </> 
   )
 }
