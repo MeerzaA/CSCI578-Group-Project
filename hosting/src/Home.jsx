@@ -7,7 +7,7 @@ const Home = () => {
     <div>
         Crypto Board
       </div>
-      <div>
+      <div className='m-10'>
         <CryptoButtons/>
       </div>
       <div>

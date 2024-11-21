@@ -10,7 +10,7 @@ const CryptoButton = (props) => {
   return (
     <>
       <button onClick={handleButtonClick}>
-        {props.name} {props.sentScore}
+        {props.name}
       </button>
     </>
   );

@@ -3,10 +3,17 @@ import { useParams } from "react-router-dom";
 import Graph from "./Graph";
 import fbapp from "./creds"; // Assuming the correct path to your configuration file
 import { getDatabase, ref, onValue } from "firebase/database";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button"
 //TODO: Grab Graph Data Here (frequency from News, Frequency from Social Media, Sentiment over Time)
 
 const CryptoPage = () => {
   const { name } = useParams();
+
+  const navigate = useNavigate();
+  const handleButtonClick = () => {
+    navigate(`/`);
+  };
 
   const [data, setData] = useState([]);
 
@@ -28,10 +35,7 @@ const CryptoPage = () => {
         if (dataItem) {
           // Convert the object values into an array
           const displayItem = Object.entries(dataItem);
-          console.log(displayItem)
 
-          console.log(displayItem[0][1]['Sentiment'])
-          // console.log(displayItem["1"]["1"])
           setData([displayItem[0][1]['Sentiment']]);
         }
       });
@@ -1582,6 +1586,7 @@ const CryptoPage = () => {
 
   return (
     <>
+      <Button onClick={handleButtonClick} className='m-5'>Home</Button>
       <div>{name}</div>
       <div>
         <h1>Data from database:</h1>
@@ -1594,6 +1599,7 @@ const CryptoPage = () => {
       <Graph options={news} />
       <Graph options={social_media} />
       <Graph options={sentiment} />
+      
     </>
   );
 };
