@@ -2,6 +2,9 @@ from transformers import pipeline
 import sys
 from time import sleep
 
+from aggregator.FireBase import FirebaseService
+
+
 # Placeholder class to simulate a data stream
 class DataPipe:
 
@@ -102,6 +105,9 @@ def main():
     # Totally dumb and synchronous for now. Just create the pipe and put hard-coded data on it. Then
     # read the data from the queue, perform sentiment analysis and write the output to the database.
     #
+    firebase = FirebaseService()
+    firebase.get_crypto_data()
+    firebase.put_crypto_data()
     pipe = DataPipe( "Pipe" )
     ds = Crawler( "Crawler", pipe.output_pipe )
     agg = Aggregator( "Aggregator", pipe.input_pipe, default_model )

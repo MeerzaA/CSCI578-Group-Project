@@ -1,4 +1,5 @@
 # To ensure app dependencies are ported from your virtual environment/host machine into your container, run 'pip freeze > requirements.txt' in the terminal to overwrite this file
+firebase-admin==6.6.0
 h5py==3.12.1
 joblib==1.4.2
 matplotlib==3.9.2
