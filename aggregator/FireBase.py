@@ -25,6 +25,27 @@ class FirebaseService:
         print(data)
         pass
 
+    #need to add parameters CRYPTO_TYPE, actual data,
+    def put_crypto_data(self):
+        # Logic to fetch data from Firebase
+
+        #this number works. need to figure out counter per coin. replace 7 with counter var
+        ref = db.reference("Bitcoin/7")
+
+        # Add a new entry without overwriting
+        new_data = {
+            "Sentiment": "420.0",
+            "Site": "twitter",
+            "Source": "Social Medial",
+            "date": "1993-05-02",
+            "link": "www.twitter.com"
+        }
+        ref.push(new_data)
+
+        print("New data has been added to the database.")
+        pass
+
+
 
 
 

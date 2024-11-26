@@ -107,6 +107,7 @@ def main():
     #
     firebase = FirebaseService()
     firebase.get_crypto_data()
+    firebase.put_crypto_data()
     pipe = DataPipe( "Pipe" )
     ds = Crawler( "Crawler", pipe.output_pipe )
     agg = Aggregator( "Aggregator", pipe.input_pipe, default_model )
