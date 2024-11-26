@@ -1,5 +1,6 @@
 import React from 'react'
-import CryptoButtons from './CryptoButtons'
+import CryptoButtons from "../components/CryptoButtons";
+
 
 const Home = () => {
   return (
@@ -17,4 +18,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default Home;

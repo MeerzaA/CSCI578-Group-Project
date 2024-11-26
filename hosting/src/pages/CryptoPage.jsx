@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Graph from "./Graph";
-import fbapp from "./creds"; // Assuming the correct path to your configuration file
+import Graph from "@/components/Graph";
+import fbapp from "@/firebase/firebaseConfig";
 import { getDatabase, ref, onValue } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button"
