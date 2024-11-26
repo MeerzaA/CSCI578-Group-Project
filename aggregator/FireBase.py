@@ -28,7 +28,7 @@ class FirebaseService:
 
         # Reference a specific path in the database
         counter = self.crypto_counter[crypto_name]
-        ref = db.reference(f"{crypto_name}/{counter}")
+        ref = db.reference(crypto_name)
 
         # Get data at this path
         data = ref.get()
