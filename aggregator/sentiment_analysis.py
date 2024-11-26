@@ -108,8 +108,6 @@ def main():
     
     ds.run()
     agg.run()
-    firebase = FirebaseService()
-    firebase.get_crypto_data()
     
 if __name__ == '__main__':
     sys.exit(main())
