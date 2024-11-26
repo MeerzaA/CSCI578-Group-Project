@@ -101,13 +101,44 @@ class Aggregator:
 
 def main():
 
-    #
+
     # Totally dumb and synchronous for now. Just create the pipe and put hard-coded data on it. Then
     # read the data from the queue, perform sentiment analysis and write the output to the database.
     #
     firebase = FirebaseService()
-    firebase.get_crypto_data()
-    firebase.put_crypto_data()
+    firebase.get_crypto_data("Bitcoin")
+    data_one = {
+        "Sentiment": "420.0",
+        "Site": "Bloomberg",
+        "Source": "News",
+        "date": "2024-11-02",
+        "link": "www.bloomberg.com"
+     }
+    data_two = {
+        "Sentiment": "32.0",
+        "Site": "CNN",
+        "Source": "News",
+        "date": "2024-11-26",
+        "link": "www.bloomberg.com"
+     }
+    data_three = {
+        "Sentiment": "99.0",
+        "Site": "Twitter",
+        "Source": "Tweet",
+        "date": "2024-11-29",
+        "link": "www.x.com"
+     }
+    data_four = {
+        "Sentiment": "23.0",
+        "Site": "X",
+        "Source": "X",
+        "date": "2024-11-15",
+        "link": "www.x.com"
+     }
+    firebase.put_crypto_data("Bitcoin", data_one)
+    firebase.put_crypto_data("Bitcoin", data_two)
+    firebase.put_crypto_data("Bitcoin", data_three)
+    firebase.put_crypto_data("Some_new_crypto", data_four)
     pipe = DataPipe( "Pipe" )
     ds = Crawler( "Crawler", pipe.output_pipe )
     agg = Aggregator( "Aggregator", pipe.input_pipe, default_model )

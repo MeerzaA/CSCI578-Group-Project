@@ -6,9 +6,12 @@ from firebase_admin import db  # Use this for Realtime Database
 
 
 class FirebaseService:
+
+
+
     def __init__(self):
         self.connection = self.connect_to_firebase()
-        print("kevin kuo - test 123")
+        self.crypto_counter = {}
 
     def connect_to_firebase(self):
         # Firebase initialization logic
@@ -20,11 +23,12 @@ class FirebaseService:
         firebase_admin.initialize_app(cred, {"databaseURL": "https://crypto-board-csci578-default-rtdb.firebaseio.com/"})
         pass
 
-    def get_crypto_data(self):
+    def get_crypto_data(self, crypto_name):
         # Logic to fetch data from Firebase
 
         # Reference a specific path in the database
-        ref = db.reference("Bitcoin/0/Source")
+        counter = self.crypto_counter[crypto_name]
+        ref = db.reference(f"{crypto_name}/{counter}")
 
         # Get data at this path
         data = ref.get()
@@ -32,22 +36,20 @@ class FirebaseService:
         print(data)
         pass
 
-    #need to add parameters CRYPTO_TYPE, actual data,
-    def put_crypto_data(self):
-        # Logic to fetch data from Firebase
+    # mostly used chatgpt for this function
+    def put_crypto_data(self,crypto_name, data):
 
-        #this number works. need to figure out counter per coin. replace 7 with counter var
-        ref = db.reference("Bitcoin/8")
+        # Increment counter for the given crypto name
+        if crypto_name not in self.crypto_counter:
+            self.crypto_counter[crypto_name] = 0
+        self.crypto_counter[crypto_name] += 1
 
-        # Add a new entry without overwriting
-        new_data = {
-            "Sentiment": "421.0",
-            "Site": "tweet",
-            "Source": "Social",
-            "date": "1993-05-02",
-            "link": "www.twitter.com"
-        }
-        ref.push(new_data)
+        # Use the counter as part of the key
+        counter = self.crypto_counter[crypto_name]
+
+        # Comes up with crypto path + sends data
+        ref = db.reference(f"{crypto_name}/{counter}")
+        ref.set(data)
 
         print("New data has been added to the database.")
         pass
