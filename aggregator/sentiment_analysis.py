@@ -2,6 +2,9 @@ from transformers import pipeline
 import sys
 from time import sleep
 
+from aggregator.FireBase import FirebaseService
+
+
 # Placeholder class to simulate a data stream
 class DataPipe:
 

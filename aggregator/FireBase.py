@@ -5,6 +5,7 @@ from firebase_admin import db  # Use this for Realtime Database
 class FirebaseService:
     def __init__(self):
         self.connection = self.connect_to_firebase()
+        print("hello")
 
     def connect_to_firebase(self):
         # Firebase initialization logic
