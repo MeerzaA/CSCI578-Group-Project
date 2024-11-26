@@ -105,14 +105,14 @@ def main():
     # Totally dumb and synchronous for now. Just create the pipe and put hard-coded data on it. Then
     # read the data from the queue, perform sentiment analysis and write the output to the database.
     #
+    firebase = FirebaseService()
+    firebase.get_crypto_data()
     pipe = DataPipe( "Pipe" )
     ds = Crawler( "Crawler", pipe.output_pipe )
     agg = Aggregator( "Aggregator", pipe.input_pipe, default_model )
     
     ds.run()
     agg.run()
-    firebase = FirebaseService()
-    firebase.get_crypto_data()
     
 if __name__ == '__main__':
     sys.exit(main())
