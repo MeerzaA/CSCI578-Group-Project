@@ -1,48 +1,26 @@
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
-import app from "./firebaseConfig";
+import { auth } from "./firebaseConfig";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { db } from "./firebaseConfig";
+import { ref, set } from "firebase/database";
 
-// Initialize Auth
-const auth = getAuth(app);
+// Sign Up and Add User to Database
+export const signUp = async (email, password, name) => {
+  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  const user = userCredential.user;
 
-/**
- * Sign in 
- * @param {string} email - User email
- * @param {string} password - User password
- */
-export const signIn = async (email, password) => {
-  try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    return userCredential.user; // authenticated user
-  } catch (error) {
-    console.error("Error signing in:", error.message);
-    throw error;
-  }
+  // Add user to Realtime Database
+  const dbRef = ref(db, `users/${user.uid}`);
+  await set(dbRef, { email, name, uid: user.uid });
+
+  return user;
 };
 
-/**
- * email and password
- * @param {string} email - User email
- * @param {string} password - User password
- */
-export const signUp = async (email, password) => {
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    return userCredential.user; // newly user
-  } catch (error) {
-    console.error("Error signing up:", error.message);
-    throw error;
-  }
+// Sign In
+export const signIn = (email, password) => {
+  return signInWithEmailAndPassword(auth, email, password);
 };
 
-/**
- * Sign out
- */
-export const logout = async () => {
-  try {
-    await signOut(auth);
-    console.log("User signed out successfully.");
-  } catch (error) {
-    console.error("Error signing out:", error.message);
-    throw error;
-  }
+// Sign Out
+export const logOut = () => {
+  return signOut(auth);
 };

@@ -1,4 +1,10 @@
-import CryptoButton from "./CryptoButton"
+import CryptoButton from "./CryptoButton";
+import { columns } from "./payments/columns";
+import { DataTable } from "./payments/data-table";
+import { useState } from "react";
+
+
+
 
 //TODO: Grab Name and sentiment from FireBase
 

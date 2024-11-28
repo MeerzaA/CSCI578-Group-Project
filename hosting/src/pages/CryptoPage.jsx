@@ -1,13 +1,28 @@
+
+//react
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Graph from "@/components/Graph";
-import fbapp from "@/firebase/firebaseConfig";
-import { getDatabase, ref, onValue } from "firebase/database";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button"
+
+//firebae
+import fbapp from "../firebase/firebaseConfig";
+import { getDatabase, ref, onValue } from "firebase/database";
+import { writeData, readData, subscribeToData } from "../firebase/database";
+
+//components
+import Graph from "../components/Graph";
+import { Button } from "../components/ui/button"
+
 //TODO: Grab Graph Data Here (frequency from News, Frequency from Social Media, Sentiment over Time)
 
 const CryptoPage = () => {
+
+  // Write Example Data
+  const addData = async () => {
+    const newCrypto = { id: "1", name: "Bitcoin", sentiment: "Positive" };
+    await writeData("cryptos/1", newCrypto);
+  };
+
   const { name } = useParams();
 
   const navigate = useNavigate();
