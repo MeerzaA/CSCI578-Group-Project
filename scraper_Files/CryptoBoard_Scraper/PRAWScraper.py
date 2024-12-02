@@ -64,7 +64,7 @@ for currency in cryptocurrencies:
             scraped_data["Scraped_Format"].append(copy.deepcopy(json_template))
 
 # Set the output directory relative to the spider's directory
-output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
+output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../scrape_results"))
 os.makedirs(output_dir, exist_ok=True)  # Ensure the directory exists
 date = datetime.datetime.now().strftime("%Y-%m-%d")
 output_file = os.path.join(output_dir, f"reddit-{date}.json")
