@@ -51,6 +51,8 @@ const CryptoPage = () => {
           // Convert the object values into an array
           const displayItem = Object.entries(dataItem);
 
+          console.log("TEST")
+          
           setData([displayItem[0][1]['Sentiment']]);
         }
       });
@@ -1614,7 +1616,9 @@ const CryptoPage = () => {
       <Graph options={news} />
       <Graph options={social_media} />
       <Graph options={sentiment} />
-      
+      <div className="">
+        FootNote
+      </div>
     </>
   );
 };

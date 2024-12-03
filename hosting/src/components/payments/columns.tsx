@@ -21,9 +21,18 @@ export const columns: ColumnDef<Payment>[] = [
   },
   {
     accessorKey: "sentiment",
-    header: () => <div className="text-left">Sentiment</div>,
+    header: () => <div className="text-center">Sentiment</div>,
     cell: ({ row }) => {
-      return <div  className="text-left font-medium">{row.getValue("sentiment")}</div>
+      let sent = parseFloat(row.getValue("sentiment"))
+      if (sent > 7){
+        return <div  className="text-center text-green-600 font-medium">{row.getValue("sentiment")}</div>
+      }
+      else if (sent < 4){
+        return <div  className="text-center text-red-600 font-medium">{row.getValue("sentiment")}</div>
+      }
+      else{
+        return <div  className="text-center text-yellow-600 font-medium">{row.getValue("sentiment")}</div>
+      }
     },
 
   },
