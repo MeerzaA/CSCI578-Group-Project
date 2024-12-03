@@ -8,10 +8,12 @@ from scrapy import signals
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
 
+import random
+import time
 
 class CryptoboardScraperSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
-    # scrapy acts as if the spider middleware does not modify the
+    # Scrapy acts as if the spider middleware does not modify the
     # passed objects.
 
     @classmethod
@@ -24,31 +26,23 @@ class CryptoboardScraperSpiderMiddleware:
     def process_spider_input(self, response, spider):
         # Called for each response that goes through the spider
         # middleware and into the spider.
-
-        # Should return None or raise an exception.
         return None
 
     def process_spider_output(self, response, result, spider):
-        # Called with the results returned from the Spider, after
-        # it has processed the response.
-
-        # Must return an iterable of Request, or item objects.
+        # Called with the results returned from the Spider,
+        # after it has processed the response.
         for i in result:
             yield i
 
     def process_spider_exception(self, response, exception, spider):
         # Called when a spider or process_spider_input() method
-        # (from other spider middleware) raises an exception.
-
-        # Should return either None or an iterable of Request or item objects.
+        # raises an exception.
         pass
 
     def process_start_requests(self, start_requests, spider):
         # Called with the start requests of the spider, and works
         # similarly to the process_spider_output() method, except
         # that it doesn’t have a response associated.
-
-        # Must return only requests (not items).
         for r in start_requests:
             yield r
 
@@ -56,48 +50,46 @@ class CryptoboardScraperSpiderMiddleware:
         spider.logger.info("Spider opened: %s" % spider.name)
 
 
-class CryptoboardScraperDownloaderMiddleware:
-    # Not all methods need to be defined. If a method is not defined,
-    # scrapy acts as if the downloader middleware does not modify the
-    # passed objects.
-
-    @classmethod
-    def from_crawler(cls, crawler):
-        # This method is used by Scrapy to create your spiders.
-        s = cls()
-        crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
-        return s
+class RotateUserAgentMiddleware:
+    # Middleware for rotating user agents to avoid detection.
+    USER_AGENTS = [
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0 Safari/537.36',
+        'Mozilla/5.0 (Linux; Android 10; SM-G960F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0 Mobile Safari/537.36',
+        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0 Safari/537.36',
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1',
+    ]
 
     def process_request(self, request, spider):
-        # Called for each request that goes through the downloader
-        # middleware.
+        # Assigns a random user agent to each request.
+        user_agent = random.choice(self.USER_AGENTS)
+        request.headers['User-Agent'] = user_agent
+        spider.logger.info(f'Using User-Agent: {user_agent}')
 
-        # Must either:
-        # - return None: continue processing this request
-        # - or return a Response object
-        # - or return a Request object
-        # - or raise IgnoreRequest: process_exception() methods of
-        #   installed downloader middleware will be called
-        return None
-
+class RetryOn429Middleware:
+    # Middleware for retrying requests that return HTTP 429.
     def process_response(self, request, response, spider):
-        # Called with the response returned from the downloader.
-
-        # Must either;
-        # - return a Response object
-        # - return a Request object
-        # - or raise IgnoreRequest
+        if response.status == 429:
+            # Retry the request if server responds with 429 Too Many Requests.
+            spider.logger.warning(f"429 Too Many Requests for {request.url}. Retrying...")
+            return request
         return response
 
     def process_exception(self, request, exception, spider):
-        # Called when a download handler or a process_request()
-        # (from other downloader middleware) raises an exception.
+        # Log the exception and continue with other requests.
+        spider.logger.error(f"Request failed for {request.url}: {exception}")
+        return None
 
-        # Must either:
-        # - return None: continue processing this exception
-        # - return a Response object: stops process_exception() chain
-        # - return a Request object: stops process_exception() chain
-        pass
 
-    def spider_opened(self, spider):
-        spider.logger.info("Spider opened: %s" % spider.name)
+class DelayRequestsMiddleware:
+    # Middleware for adding a delay between requests to mimic human behavior.
+    def __init__(self, delay):
+        self.delay = delay
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        # Retrieves the delay setting from Scrapy's settings.
+        return cls(delay=crawler.settings.get('DOWNLOAD_DELAY', 1))
+
+    def process_request(self, request, spider):
+        # Introduces a delay before processing the request.
+        time.sleep(self.delay)

@@ -25,7 +25,7 @@ ROBOTSTXT_OBEY = True
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 2
+#DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -47,6 +47,14 @@ DOWNLOAD_DELAY = 2
 #SPIDER_MIDDLEWARES = {
 #    "CryptoBoard_Scraper.middlewares.CryptoboardScraperSpiderMiddleware": 543,
 #}
+DOWNLOADER_MIDDLEWARES = {
+    'CryptoBoard_Scraper.middlewares.RotateUserAgentMiddleware': 400,
+    'CryptoBoard_Scraper.middlewares.RetryOn429Middleware': 420,
+    'CryptoBoard_Scraper.middlewares.DelayRequestsMiddleware': 430,
+}
+
+
+
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
@@ -92,43 +100,4 @@ REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
-# User-Agent to avoid being flagged as a bot
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-
-# Enable AutoThrottle to adapt to server response times
-AUTOTHROTTLE_ENABLED = True
-AUTOTHROTTLE_START_DELAY = 2
-AUTOTHROTTLE_MAX_DELAY = 30
-AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
-AUTOTHROTTLE_DEBUG = False
-
-# Enable HTTP cache to save bandwidth during development
-HTTPCACHE_ENABLED = True
-HTTPCACHE_EXPIRATION_SECS = 3600
-HTTPCACHE_DIR = "httpcache"
-HTTPCACHE_IGNORE_HTTP_CODES = []
-HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
-
-# Concurrent requests configuration
-CONCURRENT_REQUESTS = 16
-CONCURRENT_REQUESTS_PER_DOMAIN = 8
-CONCURRENT_REQUESTS_PER_IP = 8
-
-# Logging configuration
-LOG_LEVEL = 'INFO'
-
-# Encoding for exported data
-FEED_EXPORT_ENCODING = "utf-8"
-
-# Future-proof settings
-REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
-TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
-
-# Limit depth to 3 levels
-DEPTH_LIMIT = 3
-
-# Display detailed depth stats
-DEPTH_STATS_VERBOSE = True
-
-# Prioritize deeper requests
-DEPTH_PRIORITY = 1
+DOWNLOAD_DELAY = 1.0  # Delay of 1 second between requests
