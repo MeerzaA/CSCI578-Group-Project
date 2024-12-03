@@ -1,17 +1,24 @@
 import firebase_admin
 from firebase_admin import credentials
-from firebase_admin import db  # Use this for Realtime Database
+from firebase_admin import db  # Use this for Realime Database
 
 class FirebaseService:
     def __init__(self, name ):
         self.connection = self.connect_to_firebase()
-        print( f"{name} initialized." )
+        self.name = name
+        self.counts = { 'Bitcoin': -1, 'Ethereum': 0 } # For some reason Bitcoin has a phantom element that is being returned. Accounting for it here until it can be properly corrected.
 
-    def connect_to_firebase(self):
+        for key in self.counts:
+            self.counts[key] += self.get_count_for_tag( key )
+        
+        print( 'current db counts-- ', self.counts )
+        print( f"{name} initialized.")
+        
+
+    def connect_to_firebase( self ):
         # Firebase initialization logic
         cred = credentials.Certificate('aggregator/crypto-board-csci578-firebase-adminsdk-srcrn-c7680a0a8d.json')
         firebase_admin.initialize_app(cred, {"databaseURL": "https://crypto-board-csci578-default-rtdb.firebaseio.com/"})
-        pass
 
     def get_crypto_data(self):
         # Logic to fetch data from Firebase
@@ -23,20 +30,23 @@ class FirebaseService:
         data = ref.get()
 
         print(data)
-        pass
 
-    #need to add parameters CRYPTO_TYPE, actual data,
-    def put_crypto_data(self, db_ref, output_data ):
-        # Logic to fetch data from Firebase
-
-        #this number works. need to figure out counter per coin. replace 7 with counter var
-        #ref = db.reference( db_ref )
-
-        #ref.push( output_data )
-        print( output_data )
-
+    def get_count_for_tag( self, tag ):
+        ref = db.reference( tag ) 
+        data = ref.get()
+        return len(data)
+        
+    def put_crypto_data( self, output_data ):
+        
+        currency = output_data['currency']
+        del output_data['currency'] 
+        current_count = self.counts[currency] 
+        tag = currency + f"/{current_count+1}"
+        ref = db.reference( tag )
+        ref.push( output_data )
+        self.counts[currency] += 1
+        
         print("New data has been added to the database.")
-        pass
 
 
 
