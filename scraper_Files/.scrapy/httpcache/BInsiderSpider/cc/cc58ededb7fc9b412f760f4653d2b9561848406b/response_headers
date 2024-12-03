@@ -1,0 +1,23 @@
+Content-Length: 58807
+Content-Type: text/html; charset=utf-8
+Set-Cookie: AWSALBTG=wectoJ4cDkQUF6316DlrI9368n+9AbJS2rCF5RM3FaT4mBjayLMdG0dueARSERKWXzfjw2CHuSf/K8SRSEjrGqp6Ki4fNTRqgW//EB6nz+3YKa4U/U7IoIZNXEI8FnbUyryY7usCW0Iz6qOCH6va8K4ke2fxxXIP1IMcQe+7j0vh; Expires=Thu, 05 Dec 2024 19:56:26 GMT; Path=/
+Set-Cookie: AWSALBTGCORS=wectoJ4cDkQUF6316DlrI9368n+9AbJS2rCF5RM3FaT4mBjayLMdG0dueARSERKWXzfjw2CHuSf/K8SRSEjrGqp6Ki4fNTRqgW//EB6nz+3YKa4U/U7IoIZNXEI8FnbUyryY7usCW0Iz6qOCH6va8K4ke2fxxXIP1IMcQe+7j0vh; Expires=Thu, 05 Dec 2024 19:56:26 GMT; Path=/; SameSite=None; Secure
+X-Powered-By: Fenrir
+Last-Modified: Thu, 28 Nov 2024 15:01:30 GMT
+Cache-Control: public, max-age=120
+X-Origin-Version: main-241128.1608
+X-Frame-Options: sameorigin
+Link: </styles/post-page.8cd81167c1f305f757f7.css>; rel=preload; as=style; nopush, </scripts/main.6d391c58112144c6425e.js>; rel=preload; as=script; fetchpriority=low; nopush, </scripts/vendors.f39084c26b26fec2ab0c.js>; rel=preload; as=script; fetchpriority=low; nopush, </scripts/utilities.6d50648d04beab0ec191.js>; rel=preload; as=script; fetchpriority=low; nopush, </public/fonts/Garnett-VF-Subset.woff2>; rel=preload; as=font; type=font/woff2; crossorigin; fetchpriority=low; nopush
+Etag: W/"463ea-WF2t3dFZ1rPxgZQURm4RV8jhta8"
+Content-Encoding: gzip
+Via: 1.1 varnish, 1.1 varnish
+X-Country-Code: US
+Accept-Ranges: bytes
+Age: 19407
+Date: Fri, 29 Nov 2024 01:19:53 GMT
+X-Served-By: cache-iad-kjyo7100139-IAD, cache-ewr-kewr1740063-EWR
+X-Cache: HIT, HIT
+X-Cache-Hits: 2, 0
+X-Timer: S1732843194.674246,VS0,VE1
+Vary: Accept-Encoding, Authorization, Fastly-SSL, X-Device, X-Continent-Code, X-User-Status, X-User-Has-Access, X-Is-Sponsored-Country, X-Privacy-Api, X-Is-Bot, X-ABTest-ctc, X-ABTest-pmp
+Strict-Transport-Security: max-age=31536000
