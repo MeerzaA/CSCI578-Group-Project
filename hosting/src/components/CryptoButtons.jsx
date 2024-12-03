@@ -3,9 +3,6 @@ import { columns } from "./payments/columns";
 import { DataTable } from "./payments/data-table";
 import { useState } from "react";
 
-
-
-
 //TODO: Grab Name and sentiment from FireBase
 
 
@@ -18,8 +15,8 @@ const CryptoButtons = () => {
   },
 {
     id: "214234d",
-    sentiment: 1,
-    crypto: <CryptoButton name="Ethereum" sentScore="1"/>,
+    sentiment: 2,
+    crypto: <CryptoButton name="Ethereum" sentScore="2"/>,
   }]);
 
 
