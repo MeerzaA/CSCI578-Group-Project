@@ -5,14 +5,11 @@ import CryptoButtons from "../components/CryptoButtons";
 const Home = () => {
   return (
     <>
-    <div>
+    <div className="m-5 text-center">
         Crypto Board
       </div>
-      <div className='m-10'>
+      <div className="m-5 w-80 mx-auto">
         <CryptoButtons/>
-      </div>
-      <div>
-        FootNote
       </div>
     </>
   )

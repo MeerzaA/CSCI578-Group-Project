@@ -6,6 +6,7 @@ import path from 'path';
 export default defineConfig({
   plugins: [react()],
   root: '.', // Set root to the 'hosting' directory
+  serve : { port : 5173 },
   build: {
     outDir: 'dist', // Output build files to 'hosting/dist'
   },

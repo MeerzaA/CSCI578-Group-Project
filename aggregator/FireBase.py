@@ -1,17 +1,29 @@
 import firebase_admin
 from firebase_admin import credentials
-from firebase_admin import db  # Use this for Realtime Database
+from firebase_admin import db  # Use this for Realime Database
 
 class FirebaseService:
     def __init__(self, name ):
         self.connection = self.connect_to_firebase()
-        print( f"{name} initialized." )
+        self.name = name
+        self.counts = { 'Bitcoin': {'Unknown':0}, 'Ethereum': {'Unknown':0}, 'Solana': {'Unknown':0} } 
 
-    def connect_to_firebase(self):
+        for key in self.counts:
+            date, count = self.get_count_for_tag( key )
+            if date is not None:
+                self.counts[key][date] = count
+            else:
+                self.counts[key]['Unknown'] += count
+        
+
+        print( 'current db counts-- ', self.counts )
+        print( f"{name} initialized.")
+        
+
+    def connect_to_firebase( self ):
         # Firebase initialization logic
         cred = credentials.Certificate('aggregator/crypto-board-csci578-firebase-adminsdk-srcrn-c7680a0a8d.json')
         firebase_admin.initialize_app(cred, {"databaseURL": "https://crypto-board-csci578-default-rtdb.firebaseio.com/"})
-        pass
 
     def get_crypto_data(self):
         # Logic to fetch data from Firebase
@@ -23,20 +35,29 @@ class FirebaseService:
         data = ref.get()
 
         print(data)
-        pass
 
-    #need to add parameters CRYPTO_TYPE, actual data,
-    def put_crypto_data(self, db_ref, output_data ):
-        # Logic to fetch data from Firebase
-
-        #this number works. need to figure out counter per coin. replace 7 with counter var
-        #ref = db.reference( db_ref )
-
-        #ref.push( output_data )
-        print( output_data )
-
+    def get_count_for_tag( self, tag ):
+        ref = db.reference( tag ) 
+        dates = ref.get()
+        if dates is not None:
+            for date, data in dates.items():
+                return date, len(data)
+        else:
+            return None, 0
+        
+    def put_crypto_data( self, output_data ):
+        
+        currency = output_data['currency']
+        date = output_data['date']
+        del output_data['currency'] 
+        del output_data['date']
+        current_count = self.counts[currency].get(date, 0)
+        tag = currency + f"/{date}/{current_count+1}"
+        ref = db.reference( tag )
+        ref.update( output_data )
+        self.counts[currency][date] = current_count + 1
+        
         print("New data has been added to the database.")
-        pass
 
 
 

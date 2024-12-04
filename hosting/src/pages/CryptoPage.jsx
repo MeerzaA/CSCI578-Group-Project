@@ -1,69 +1,35 @@
-
 //react
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
-//firebae
-import fbapp from "../firebase/firebaseConfig";
-import { getDatabase, ref, onValue } from "firebase/database";
-import { writeData, readData, subscribeToData } from "../firebase/database";
 
 //components
 import Graph from "../components/Graph";
-import { Button } from "../components/ui/button"
+import { Button } from "../components/ui/button";
 
 //TODO: Grab Graph Data Here (frequency from News, Frequency from Social Media, Sentiment over Time)
 
 const CryptoPage = () => {
-
-  // Write Example Data
-  const addData = async () => {
-    const newCrypto = { id: "1", name: "Bitcoin", sentiment: "Positive" };
-    await writeData("cryptos/1", newCrypto);
-  };
-
   const { name } = useParams();
+  const { state } = useLocation();
 
   const navigate = useNavigate();
   const handleButtonClick = () => {
     navigate(`/`);
   };
 
-  const [data, setData] = useState([]);
+  console.log(state);
 
-  useEffect(() => {
-    // Initialize the Firebase database with the provided configuration
-    const database = getDatabase(fbapp);
-
-    // Reference to the specific collection in the database
-    const collectionRef = ref(database, name);
-    
-
-    // Function to fetch data from the database
-    const fetchData = () => {
-      // Listen for changes in the collection
-      
-      onValue(collectionRef, (snapshot) => {
-        const dataItem = snapshot.val();
-        // Check if dataItem exists
-        if (dataItem) {
-          // Convert the object values into an array
-          const displayItem = Object.entries(dataItem);
-
-          setData([displayItem[0][1]['Sentiment']]);
-        }
-      });
-    };
-
-    // Fetch data when the component mounts
-    fetchData();
-  }, []);
+  const data = state.info[1].Sentiment;
 
   const news = {
     title: {
       text: "News Impressions",
     },
+    accessibility: {
+      enabled: false,
+    },
+
     series: [
       {
         data: [
@@ -576,6 +542,9 @@ const CryptoPage = () => {
   const social_media = {
     title: {
       text: "Social Media Impressions",
+    },
+    accessibility: {
+      enabled: false,
     },
     series: [
       {
@@ -1597,24 +1566,37 @@ const CryptoPage = () => {
         ],
       },
     ],
+    accessibility: {
+      enabled: false,
+    },
   };
 
   return (
     <>
-      <Button onClick={handleButtonClick} className='m-5'>Home</Button>
-      <div>{name}</div>
-      <div>
-        <h1>Data from database:</h1>
-        <ul>
-          {data.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
+      <div className="m-5">
+        <Button onClick={handleButtonClick}>Home</Button>
+        <div className="text-center">{name}</div>
+        <div>
+          <h1>Data from database: {data}</h1>
+        </div>
+        <div className="w-full grid grid-cols-4">
+          <div></div>
+          <div className="col-span-6 md:col-span-2">
+            <Graph options={news} />
+          </div>
+          <div></div>
+          <div></div>
+          <div className="col-span-6 md:col-span-2">
+            <Graph options={social_media} />
+          </div>
+          <div></div>
+          <div></div>
+          <div className="col-span-6 md:col-span-2">
+            <Graph options={sentiment} />
+          </div>
+          <div></div>
+        </div>
       </div>
-      <Graph options={news} />
-      <Graph options={social_media} />
-      <Graph options={sentiment} />
-      
     </>
   );
 };
