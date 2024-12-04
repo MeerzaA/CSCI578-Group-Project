@@ -11,9 +11,6 @@ const Home = () => {
       <div className="m-5 w-80 mx-auto">
         <CryptoButtons/>
       </div>
-      <div className="">
-        FootNote
-      </div>
     </>
   )
 }

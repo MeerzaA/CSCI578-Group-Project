@@ -53,9 +53,7 @@ const AuthPage = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button onClick={handleAuth}>
-        {isSignUp ? "Sign Up" : "Sign In"}
-      </button>
+      <button onClick={handleAuth}>{isSignUp ? "Sign Up" : "Sign In"}</button>
       <button onClick={() => setIsSignUp(!isSignUp)}>
         Switch to {isSignUp ? "Sign In" : "Sign Up"}
       </button>
