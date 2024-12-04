@@ -21,6 +21,7 @@ EXPOSE 9000
 EXPOSE 9005
 EXPOSE 9099
 EXPOSE 9199
+EXPOSE 5173
 SHELL ["/bin/bash", "-c"]
 
 # Keeps Python from generating .pyc files in the container
@@ -51,12 +52,17 @@ RUN apt-get install -y autoconf g++ libtool make openjdk-17-jre-headless
 RUN java -version
 RUN chown -R node:node $HOME
 RUN apt-get install -y sudo
+RUN apt-get install -y vim
+ENV HOME=/app
+
+COPY . $HOME 
+WORKDIR $HOME/hosting
+RUN npm install
+RUN npm run build 
     
 
-ENV HOME=/app
-VOLUME $HOME/.cache
 WORKDIR $HOME
-COPY . $HOME 
+VOLUME $HOME/.cache
 
 ## Creates a non-root user with an explicit UID and adds permission to access the /app folder
 ## For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
@@ -64,5 +70,5 @@ COPY . $HOME
 USER root
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-CMD ["bash"]  
-#python3 ./aggregator/sentiment_analysis.py
+CMD ["bash"]
+#CMD ["bash", "-c", "./frontend.sh"]  
