@@ -7,7 +7,7 @@ class BInsiderSpider(scrapy.Spider):
     name = "BInsiderSpider"
     allowed_domains = ["businessinsider.com"]
     start_urls = ["https://www.businessinsider.com/"]
-
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.scraped_data = {}
