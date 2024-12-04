@@ -26,6 +26,10 @@ const CryptoPage = () => {
     title: {
       text: "News Impressions",
     },
+    accessibility: {
+      enabled: false,
+    },
+
     series: [
       {
         data: [
@@ -538,6 +542,9 @@ const CryptoPage = () => {
   const social_media = {
     title: {
       text: "Social Media Impressions",
+    },
+    accessibility: {
+      enabled: false,
     },
     series: [
       {
@@ -1559,6 +1566,9 @@ const CryptoPage = () => {
         ],
       },
     ],
+    accessibility: {
+      enabled: false,
+    },
   };
 
   return (
