@@ -43,7 +43,7 @@ class FirebaseService:
         current_count = self.counts[currency] 
         tag = currency + f"/{current_count+1}"
         ref = db.reference( tag )
-        ref.push( output_data )
+        ref.update( output_data )
         self.counts[currency] += 1
         
         print("New data has been added to the database.")
