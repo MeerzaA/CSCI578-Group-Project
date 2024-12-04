@@ -37,6 +37,9 @@ RUN backend/bin/pip install --upgrade pip
 RUN backend/bin/python3 -m pip install -r requirements.txt
 RUN backend/bin/python3 -m pip install -q transformers
 RUN backend/bin/python3 -m pip install -q firebase_admin
+RUN backend/bin/python3 -m pip install -q stanza
+RUN backend/bin/python3 -m pip install -q stanfordnlp
+RUN backend/bin/python3 -m pip install -q sentencepiece
 RUN npm install -g firebase-tools@${VERSION} typescript 
 RUN npm cache clean --force
 RUN firebase setup:emulators:database 

@@ -13,7 +13,7 @@ class Crawler:
     # Just send all the hard-coded data to the output pipe
     def run( self ):
         json_elements = self.data['Scraped_Format']
-        self.send( json_elements[0] )
+        self.send( json_elements )
         print( f"{self.name} exiting")
 
     def __init__( self, name, out_pipe ):
@@ -66,6 +66,7 @@ class SentimentAnalyzer:
 
     def shouldSummarize( self, input_text ):
         if len( input_text ) > 512:
+            print( f"Producing summary because text length is {len(input_text)}")
             return True
         
         return False
@@ -98,7 +99,9 @@ class SentimentAnalyzer:
     def analyzeSentiment( self, topic_list, title, input_text ):
 
         if self.shouldSummarize( input_text ):
-            input_text = self.text_summarizer.summarize_text( input_text )
+            return None
+            #summaries = self.text_summarizer.summarize_text( input_text )
+            #input_text = summaries[0]['summary_text']
 
         found_topics = self.find_topics_strings( input_text )
 
@@ -107,7 +110,7 @@ class SentimentAnalyzer:
             text_to_analyze = self.create_query( topic, input_text )
             sentiment_output = self.sentiment_pipeline( text_to_analyze )
             sentiments[key_map[topic]] = self.generateSentimentValue( sentiment_output[0] )
-       
+        #print( sentiments ) 
         return sentiments 
 
 
@@ -117,6 +120,8 @@ class SentimentAnalyzer:
         found_topics = []
         for topic in target_topics:
             pattern = r'\b' + topic.lower() + r'\b'
+            #print(pattern)
+            #print(text)
             if re.search( pattern, text ) is not None:
                 found_topics.append( topic )
 
@@ -133,7 +138,6 @@ class Aggregator:
         self.firebase_service.put_crypto_data( output_item )
 
     def parseJsonElement( self, input_data ):
-
         source = input_data['source_name']
         source_type = input_data['source_type']
         date = input_data['date']
@@ -149,14 +153,16 @@ class Aggregator:
 
     def processInput( self, input_data ):
 
-        source, source_type, date, currencies, title, url, text = self.parseJsonElement( input_data )
+        for input_item in input_data:
+           source, source_type, date, currencies, title, url, text = self.parseJsonElement( input_item )
 
-        text = self.preprocessText( text )
+           text = self.preprocessText( text )
 
-        sentiments = self.sentiment_analyzer.analyzeSentiment( currencies, title, text )
-        for currency, sentiment in sentiments.items():
-            output_item = {'currency':currency, 'source_name': source, 'source_type': source_type, 'date':date, 'title':title, 'url':url, 'sentiment': sentiment }
-            self.writeToDatabase( output_item )
+           sentiments = self.sentiment_analyzer.analyzeSentiment( currencies, title, text )
+           if sentiments is not None:
+               for currency, sentiment in sentiments.items():
+                   output_item = {'currency':currency, 'source_name': source, 'source_type': source_type, 'date':date, 'title':title, 'url':url, 'sentiment': sentiment }
+                   self.writeToDatabase( output_item )
 
     # Continue trying to read data from the pipe until Ctrl-C is pressed
     def run( self ):
