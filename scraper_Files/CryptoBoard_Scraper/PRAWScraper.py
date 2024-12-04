@@ -5,6 +5,8 @@ import json
 import datetime
 import copy
 
+OUTPUT_DIR = "../scrape_results"
+
 reddit = praw.Reddit(
     client_id="f_pgbg_ASrz1R3OMw_mFbg",
     client_secret="fU4pc-GIkTgMFXLE6CHXu12eVSZmHg",
@@ -13,15 +15,58 @@ reddit = praw.Reddit(
 
 subreddit = reddit.subreddit("CryptoCurrency")
 
-cryptocurrencies = (
+CRYPTOCURRENCIES = (
     {
         'name': 'Ethereum',
+        'search': 'ethereum',
         'symbol': 'ETH'
     },
     {
         'name': 'Bitcoin',
+        'search': 'bitcoin',
         'symbol': 'BTC'
+    },
+    {
+        'name': 'XRP',
+        'search': 'xrp',
+        'symbol': 'XRP'
+    },
+    {
+        'name': 'TetherUS',
+        'search': 'tether',
+        'symbol': 'USDT'
+    },
+    {
+        'name': 'Solana',
+        'search': 'solana',
+        'symbol': 'SOL'
+    },
+    {
+        'name': 'BNB',
+        'search': 'bnb',
+        'symbol': 'BNB'
+    },
+    {
+        'name': 'Dogecoin',
+        'search': 'dogecoin',
+        'symbol': 'DOGE'
+    },
+    {
+        'name': 'Cardano',
+        'search': 'cardano',
+        'symbol': 'ADA'
+    },
+    {
+        'name': 'USD Coin',
+        'search': 'usdc',
+        'symbol': 'USDC'
+    },
+    {
+        'name': 'Avalanche',
+        'search': 'avalanche',
+        'symbol': 'AVAX'
     })
+
 
 scraped_data = {"Scraped_Format": []}
 json_template = {
@@ -34,37 +79,46 @@ json_template = {
     "text": ""
 }
 
-for currency in cryptocurrencies:
-    lower_name = currency["name"].lower()
+
+for currency in CRYPTOCURRENCIES:
+    search_name = currency["search"].lower()
     lower_symbol = currency["symbol"].lower()
 
     json_template["cryptocurrency"] = [currency["name"]]
 
-    for post in subreddit.search(lower_name, sort="new", time_filter="week"):
+    num_comments = 0
+    filter_index = 0
+    filters = ("week", "month", "year", "all")
+    #record at least one comment, if not widen search time range
+    while num_comments < 1 and filter_index < len(filters):
+        for post in subreddit.search(search_name, sort="new", time_filter=filters[filter_index]):
 
-        # only consider titles directly mentioning the currency
-        lower_title = post.title.lower()
-        if not (lower_symbol in lower_title or lower_name in lower_title):
-            continue
-
-        json_template["title"] = post.title
-        json_template["date"] = datetime.datetime.fromtimestamp(post.created_utc).strftime("%Y-%m-%d")
-        json_template["url"] = post.url
-
-        for comment in post.comments:
-            if type(comment) is not praw.models.Comment:
+            # only consider titles directly mentioning the currency
+            lower_title = post.title.lower()
+            if not (lower_symbol in lower_title or search_name in lower_title):
                 continue
 
-            # only consider posts directly mentioning the currency
-            lower_body = comment.body.lower()
-            if not (lower_symbol in lower_body or lower_name in lower_body):
-                continue
+            json_template["title"] = post.title
+            json_template["date"] = datetime.datetime.fromtimestamp(post.created_utc).strftime("%Y-%m-%d")
+            json_template["url"] = post.url
 
-            json_template["text"] = comment.body
-            scraped_data["Scraped_Format"].append(copy.deepcopy(json_template))
+            for comment in post.comments:
+                if type(comment) is not praw.models.Comment:
+                    continue
+
+                # only consider posts directly mentioning the currency
+                lower_body = comment.body.lower()
+                if not (lower_symbol in lower_body or search_name in lower_body):
+                    continue
+
+                json_template["text"] = comment.body
+                scraped_data["Scraped_Format"].append(copy.deepcopy(json_template))
+                num_comments += 1
+        filter_index += 1
+    print(f"{num_comments} comments recorded for {currency["name"]}")
 
 # Set the output directory relative to the spider's directory
-output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../scrape_results"))
+output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), OUTPUT_DIR))
 os.makedirs(output_dir, exist_ok=True)  # Ensure the directory exists
 date = datetime.datetime.now().strftime("%Y-%m-%d")
 output_file = os.path.join(output_dir, f"reddit-{date}.json")
