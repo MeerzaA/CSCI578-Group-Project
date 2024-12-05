@@ -9,6 +9,7 @@ from itemadapter import ItemAdapter
 import os
 import sys
 
+
 # for docker we might need to make sure that the import from aggregator is reconized 
 # for example we might neeed to set a PYTHONPATH in scrapy.cfg of path home/project_root/aggregator or export PYTHONPATH=....
 # It has crashed for the 100th time, I am going to have to help it find the root no matter the enviroment 
@@ -31,12 +32,13 @@ if PROJECT_ROOT not in sys.path:
 
 from aggregator import Aggregator
 from aggregator import FirebaseService
-
+from aggregator import DataPipe
+import logging
 
 class CryptoboardScraperPipeline:
-   
 
     def process_item(self, item, spider):
         print('PROCESS ITEM!!!')
         spider.out_pipe.write( item )
         return item
+

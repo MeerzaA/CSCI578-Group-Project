@@ -57,11 +57,11 @@ class DecryptSpider(SitemapSpider):
         'Shiba Inu': 'SHIB',
         'SHIB': 'Shiba Inu',
     }
-
+    
     custom_settings = {
         
-        'CLOSESPIDER_ITEMCOUNT': 2,
-        'CONCURRENT_REQUESTS': 16, 
+        'CLOSESPIDER_ITEMCOUNT': 20,
+        'CONCURRENT_REQUESTS': 8, 
 
         'AUTOTHROTTLE_ENABLED': True,
         'AUTOTHROTTLE_MAX_DELAY': 3.0, 
@@ -120,20 +120,17 @@ class DecryptSpider(SitemapSpider):
             self.logger.info(f"Skipping article with no cryptocurrencies: {url}")
             return
 
-        # Yield the scraped data
+
         yield {
-            "Scraped_Format": [
-                {
-                    'source_name': source_name,
-                    'source_type': source_type,
-                    'date': formatted_date,
-                    'cryptocurrency': cryptocurrencies,
-                    'title': title if title else "Unknown",
-                    'url': url,
-                    'text': article_text,
-                }
-            ]
+            'source_name': source_name,
+            'source_type': source_type,
+            'date': formatted_date,
+            'cryptocurrency': cryptocurrencies,
+            'title': title if title else "Unknown",
+            'url': url,
+            'text': article_text,
         }
+
 
     def format_date_from_datetime(self, raw_date):
         try:
