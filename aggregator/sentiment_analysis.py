@@ -3,30 +3,33 @@ from time import sleep
 import json
 import stanza
 import re
+from threading import Thread
+from reddit_crawler import RedditCrawler
 
 # Placeholder class for web crawler
 class Crawler:
+       
+    def __init__( self, name, out_pipe ):
+        self.out_pipe = out_pipe
+        self.name = name
 
     def send( self, item ):
+        """Send an item to the output pipe."""
         self.out_pipe.write( item )
         
-    # Just send all the hard-coded data to the output pipe
     def run( self ):
-        json_elements = self.data['Scraped_Format']
-        self.send( json_elements )
-        print( f"{self.name} exiting")
+        # Run the Reddit crawling process.
+        self._redditCrawlThread = Thread(target=self._start_reddit_crawler)
+        self._redditCrawlThread.start()
 
-    def __init__( self, name, out_pipe ):
-        print( f"{name} loaded data." )
-        self.out_pipe = out_pipe
-        print( f"{name} initialized" )
-    
+        # TODO: Run the scrap crawling procses
 
-        print( f"{name} initializing" )
-        self.name = name
-        filename = "scrape_results/reddit-2024-12-01.json" 
-        with open( filename, "r") as file:
-            self.data = json.load(file)
+    def _start_reddit_crawler(self):
+        """Internal method to run the Reddit crawler in the background."""
+        print("Reddit crawling started.")
+        reddit_crawler = RedditCrawler()
+        reddit_crawler.crawl(self.send)
+        print("Reddit crawling completed.")
         
 #TODO: move to config file
 default_sentiment_model = "cardiffnlp/twitter-roberta-large-topic-sentiment-latest" 

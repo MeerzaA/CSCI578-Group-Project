@@ -1,3 +1,6 @@
+# Thread-safe queue
+from queue import Queue
+
 # Placeholder class to simulate a data stream
 class DataPipe:
 
@@ -6,10 +9,10 @@ class DataPipe:
 
         def write( self, item ):
             print("\n\n\nWROTE ITEM TO PIPE\n\n\n")
-            self.queue.append( item ) 
+            self.queue.put( item ) 
 
         def __init__( self, queue ):
-            self.queue = queue
+            self.queue = Queue()
             
     # The end of the pipe from which a compenent gets its input data
     class InputDataPipe:
@@ -17,9 +20,7 @@ class DataPipe:
         def read( self ):
            
             if len( self.queue ) > 0:
-                item = self.queue[0]
-                self.queue.pop(0)
-                return item
+                return self.queue.get()
             
             return None
 
