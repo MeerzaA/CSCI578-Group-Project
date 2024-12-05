@@ -66,11 +66,11 @@ class DecryptSpider(SitemapSpider):
     
     custom_settings = {
         
-        'CLOSESPIDER_ITEMCOUNT': 20,
+#        'CLOSESPIDER_ITEMCOUNT': 20,
         'CONCURRENT_REQUESTS': 8, 
 
         'AUTOTHROTTLE_ENABLED': True,
-        'AUTOTHROTTLE_MAX_DELAY': 3.0, 
+        'AUTOTHROTTLE_MAX_DELAY': 10.0, 
         'AUTOTHROTTLE_TARGET_CONCURRENCY': 5.0,  
         'AUTOTHROTTLE_DEBUG': False,  
 
@@ -130,7 +130,7 @@ class DecryptSpider(SitemapSpider):
 
 
         yield {
-            "Scraper_Format": [ 
+            "Scraped_Format": [ 
                 {
                     'source_name': source_name,
                     'source_type': source_type,

@@ -125,7 +125,7 @@ class RedditCrawler:
                 continue
 
             json_template["title"] = post.title
-            json_template["date"] = datetime.datetime.fromtimestamp(post.created_utc).strftime("%Y-%m-%d")
+            json_template["date"] = datetime.fromtimestamp(post.created_utc).strftime("%Y-%m-%d")
             json_template["url"] = post.url
             json_template["cryptocurrency"] = [currency_name]
 
@@ -143,7 +143,8 @@ class RedditCrawler:
 
                 json_template["text"] = comment.body
                 json_comments[day_idx].append(copy.deepcopy(json_template))
-                send_callback(copy.deepcopy(json_template))
+                sent_data = {'Scraped_Format':[json_template]}
+                send_callback(copy.deepcopy( sent_data))
                 num_comments += 1
 
                 if len(json_comments[day_idx]) == MAX_COMMENTS:

@@ -23,11 +23,6 @@ class Crawler:
     def __init__( self, name, out_pipe ):
         self.out_pipe = out_pipe
         self.name = name
-        settings_file_path = 'scraper_Files.CryptoBoard_Scraper.settings' # The path seen from root, ie. from main.py
-        os.environ.setdefault('SCRAPY_SETTINGS_MODULE', settings_file_path)
-        self.crawler_process = CrawlerProcess(get_project_settings()) 
-        self.crawler_process.crawl(BlockworkSpider, out_pipe=self.out_pipe)  
-        self.crawler_process.crawl(DecryptSpider, out_pipe=self.out_pipe)
 
     def send( self, item ):
         """Send an item to the output pipe."""
@@ -35,13 +30,19 @@ class Crawler:
         
     def run( self ):
         
+        settings_file_path = 'scraper_Files.CryptoBoard_Scraper.settings' # The path seen from root, ie. from backend.py
+        os.environ.setdefault('SCRAPY_SETTINGS_MODULE', settings_file_path)
+        self.crawler_process = CrawlerProcess(get_project_settings()) 
+        self.crawler_process.crawl(BlockworkSpider, out_pipe=self.out_pipe)  
+        self.crawler_process.crawl(DecryptSpider, out_pipe=self.out_pipe)
+ 
         # Run Scrapy crawl process 
         self._scrapy_thread = Thread(target=self._start_scrapy_crawl)
         self._scrapy_thread.start()
 
         # Run the Reddit crawling process.
-        #self._redditCrawlThread = Thread(target=self._start_reddit_crawler)
-        #self._redditCrawlThread.start()
+        self._redditCrawlThread = Thread(target=self._start_reddit_crawler)
+        self._redditCrawlThread.start()
 
     def _start_scrapy_crawl(self):
         """Internal method to run the Scrapy crawler in the background."""
@@ -121,7 +122,7 @@ class SentimentAnalyzer:
     
     def shouldSummarize(self, input_text):
         print("---- SHOULD SUMMARIZE FUNC ----")
-        max_length = 512  # Define based on model's maximum token limit
+        max_length = 1024#512  # Define based on model's maximum token limit
         if len(input_text) > max_length:
             print(f"Producing summary because text length is {len(input_text)}")
             return True
@@ -157,10 +158,10 @@ class SentimentAnalyzer:
         print("---- analyzeSentiment FUNC ----")
         print(f"Input text length: {len(input_text)}")
 
-        found_topics = self.find_topics_strings(topic_list)
+        found_topics = self.find_topics_strings( input_text )
 
         if self.shouldSummarize( input_text ):
-            summaries = self.text_summarizer.summarize_text( input_text )
+            summaries = self.text_summarizer.summarize_text( input_text, found_topics )
             input_text = summaries[0]['summary_text']
 
         sentiments = init_dict(found_topics)
@@ -179,13 +180,12 @@ class SentimentAnalyzer:
         return sentiments
 
     def find_topics_strings( self, text ):
-
+        print( text )
         found_topics = []
         for topic in key_map:
 
             if topic.find('@') > 0 :
                 continue
-
             pattern = r'\b' + topic.lower() + r'\b'
             #print(pattern)
             #print(text)
@@ -229,7 +229,6 @@ class Aggregator:
             source, source_type, date, currencies, title, url, text = self.parseJsonElement( input_item[0] ) #Things coming from the BlockworkSpider are single-element lists
 
             text = self.preprocessText( text )
-            print(text)
             sentiments = self.sentiment_analyzer.analyzeSentiment( currencies, title, text )
             print( "Sentiments: ", sentiments )
             if sentiments is not None:

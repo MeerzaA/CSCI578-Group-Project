@@ -56,20 +56,18 @@ class BlockworkSpider(SitemapSpider):
         'LTC': 'Litecoin',
         'Dogecoin': 'Dogecoin',
         'DOGE': 'Dogecoin',
-        'Binance Coin': 'Binance Coin',
-        'BNB' : 'Binance Coin',
-        'Cardano': 'Cardano',
+        'BNB': 'BNB',
+        'Cardano': 'ADA',
         'ADA': 'Cardano',
-        'Avalanche': 'Avalanche',
+        'Avalanche': 'AVAX',
         'AVAX': 'Avalanche',
-        'Shiba Inu': 'Shiba Inu',
+        'Shiba Inu': 'SHIB',
         'SHIB': 'Shiba Inu',
     }
 
     custom_settings = {
         
-        'CLOSESPIDER_ITEMCOUNT': 20,
-        'CONCURRENT_REQUESTS': 8,  
+        'CLOSESPIDER_ITEMCOUNT': 2, 
 
         'AUTOTHROTTLE_ENABLED': True,
         'AUTOTHROTTLE_START_DELAY': 1.0,  
@@ -108,7 +106,7 @@ class BlockworkSpider(SitemapSpider):
             return
 
         yield {
-            "Scraper_Format": [ 
+            "Scraped_Format": [
                 {
                     'source_name': source_name,
                     'source_type': source_type,
@@ -117,10 +115,9 @@ class BlockworkSpider(SitemapSpider):
                     'title': title if title else "Unknown",
                     'url': url,
                     'text': article_text,
-                } 
+                }
             ]
         }
-        
         
     def format_date(self, raw_date):
         try:

@@ -9,7 +9,7 @@ class DataPipe:
 
         def write( self, item ):
             self.queue.put( item ) 
-            print("\n\n\nWROTE ITEM TO PIPE\n\n\n")
+            print("\nWROTE ITEM TO PIPE\n")
 
         def __init__( self, queue ):
             self.queue = queue
@@ -22,7 +22,7 @@ class DataPipe:
             if self.queue.empty():
                 return None
 
-            print("\n\n\nREAD ITEM FROM PIPE\n\n\n")
+            print("\nREAD ITEM FROM PIPE\n")
             return self.queue.get()
             
 
