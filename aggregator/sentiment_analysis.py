@@ -7,6 +7,14 @@ from threading import Thread
 from .reddit_crawler import RedditCrawler
 import logging
 
+#scrapy 
+from scrapy.crawler import CrawlerProcess
+from scrapy.utils.project import get_project_settings
+from scrapy import signals
+from scrapy.signalmanager import dispatcher
+# Spiders
+from scraper_Files.CryptoBoard_Scraper.spiders.BlockworkSpider import BlockworkSpider
+from scraper_Files.CryptoBoard_Scraper.spiders.DecryptSpider import DecryptSpider
 
 # Placeholder class for web crawler
 class Crawler:
@@ -14,18 +22,31 @@ class Crawler:
     def __init__( self, name, out_pipe ):
         self.out_pipe = out_pipe
         self.name = name
+        self.crawler_process = CrawlerProcess(get_project_settings()) 
+        self.crawler_process.crawl(BlockworkSpider)  
+        self.crawler_process.crawl(DecryptSpider)
 
     def send( self, item ):
         """Send an item to the output pipe."""
         self.out_pipe.write( item )
         
     def run( self ):
+        # Start Scrapy crawl process 
+        self._scrapy_thread = Thread(target=self._start_scrapy_crawl)
+        self._scrapy_thread.start()
+        
         # Run the Reddit crawling process.
         self._redditCrawlThread = Thread(target=self._start_reddit_crawler)
         self._redditCrawlThread.start()
 
         # TODO: Run the scrap crawling procses
-
+        
+    def _start_scrapy_crawl(self):
+        """Internal method to run the Scrapy crawler in the background."""
+        print("Scrapy crawling started.")
+        self.crawler_process.start()  # Starts both crawlers
+        print("Scrapy crawling completed.")
+        
     def _start_reddit_crawler(self):
         """Internal method to run the Reddit crawler in the background."""
         print("Reddit crawling started.")
@@ -169,7 +190,11 @@ class SentimentAnalyzer:
 
     def find_topics_strings(self, text):
         print("---- find_topics_strings FUNC ----")
-        target_topics = ['BTC', 'ETH', "SOL", "Bitcoin", "Ethereum", "Solana"]
+        
+        target_topics = [
+            'BTC', 'ETH', 'SOL', 'XRP', 'LTC', 'DOGE', 'ADA', 'AVAX', 'SHIB',
+            'Bitcoin', 'Ethereum', 'Solana', 'Ripple', 'Litecoin', 'Dogecoin', 'BNB', 'Cardano', 'Avalanche', 'Shiba Inu'
+            ]
 
         found_topics = []
         text_lower = text.lower()

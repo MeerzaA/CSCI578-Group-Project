@@ -63,8 +63,8 @@ class BlockworkSpider(SitemapSpider):
 
     custom_settings = {
         
-        'CLOSESPIDER_ITEMCOUNT': 2,
-        'CONCURRENT_REQUESTS': 2,  
+        'CLOSESPIDER_ITEMCOUNT': 20,
+        'CONCURRENT_REQUESTS': 8,  
 
         'AUTOTHROTTLE_ENABLED': True,
         'AUTOTHROTTLE_START_DELAY': 1.0,  

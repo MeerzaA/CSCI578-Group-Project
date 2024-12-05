@@ -39,28 +39,44 @@ class FirebaseService:
         firebase_admin.initialize_app(cred, {"databaseURL": "https://crypto-board-csci578-default-rtdb.firebaseio.com/"})
         self.logger.info("Connected to Firebase.")
     
+
     def put_crypto_data(self, output_data):
         try:
+            # we need to look for the required keys and not push if anything is missing
+            required_keys = ['currency', 'date', 'sentiment', 'source_name', 'source_type', 'title', 'url']
+            for key in required_keys:
+                if key not in output_data:
+                    self.logger.error(f"Missing required key: {key} in output data. Skipping push to Firebase.")
+                    return  
+
+           # check for values thaat say unknown
+            if output_data['currency'] == 'Unknown' or output_data['date'] == 'Unknown':
+                self.logger.error("Invalid data: currency or date is 'Unknown'. Skipping push to Firebase.")
+                return
+
+            for key in ['sentiment', 'source_name', 'source_type', 'title', 'url']:
+                if output_data.get(key) == 'Unknown':
+                    self.logger.error(f"Invalid data: {key} is 'Unknown'. Skipping push to Firebase.")
+                    return
+
             currency = output_data['currency']
             date = output_data['date']
             del output_data['currency']
             del output_data['date']
 
-            # Initialize counts for currency and date if not present
+            
             if date not in self.counts[currency]:
                 self.counts[currency][date] = 0
 
-            # Increment count
             self.counts[currency][date] += 1
             count = self.counts[currency][date]
 
-            # Define Firebase path as 'currency/date/count'
             tag = f"{currency}/{date}/{count}"
-
+            
             ref = db.reference(tag)
+
             ref.set(output_data)  
             self.logger.info(f"New data added to Firebase under {tag}: {output_data}")
         except Exception as e:
-            self.logger.error(f"Failed to write data to Firebase: {e}") 
-
+            self.logger.error(f"Failed to write data to Firebase: {e}")
 

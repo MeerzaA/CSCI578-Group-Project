@@ -43,7 +43,7 @@ class CryptoboardScraperPipeline:
     def process_item(self, item, spider):
         self.logger.info(f"Processing item in pipeline: {item}")
         if isinstance(item, dict):
-            item = [item]  # Wrap it in a list if it's not already
+            item = [item] 
         self.aggregator.processInput(item)
         return item
 

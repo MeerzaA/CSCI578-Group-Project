@@ -57,11 +57,11 @@ class DecryptSpider(SitemapSpider):
         'Shiba Inu': 'SHIB',
         'SHIB': 'Shiba Inu',
     }
-
+    
     custom_settings = {
         
-        'CLOSESPIDER_ITEMCOUNT': 2,
-        'CONCURRENT_REQUESTS': 16, 
+        'CLOSESPIDER_ITEMCOUNT': 20,
+        'CONCURRENT_REQUESTS': 8, 
 
         'AUTOTHROTTLE_ENABLED': True,
         'AUTOTHROTTLE_MAX_DELAY': 3.0, 
