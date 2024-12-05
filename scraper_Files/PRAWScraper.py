@@ -78,6 +78,15 @@ CRYPTOCURRENCIES = (
         'sub': 'Shibainucoin'
     })
 
+test = (
+    {
+        'name': 'Shiba Inu',
+        'search': 'shib',
+        'symbol': 'SHIB',
+        'sub': 'Shibainucoin'
+    },
+)
+
 scraped_data = {"Scraped_Format": []}
 json_template = {
     "source_name": "reddit",
