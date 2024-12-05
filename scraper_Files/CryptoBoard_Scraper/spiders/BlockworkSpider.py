@@ -63,7 +63,8 @@ class BlockworkSpider(SitemapSpider):
 
     custom_settings = {
         
-        'CLOSESPIDER_ITEMCOUNT': 2, 
+        'CLOSESPIDER_ITEMCOUNT': 2,
+        'CONCURRENT_REQUESTS': 2,  
 
         'AUTOTHROTTLE_ENABLED': True,
         'AUTOTHROTTLE_START_DELAY': 1.0,  
@@ -102,17 +103,13 @@ class BlockworkSpider(SitemapSpider):
             return
 
         yield {
-            "Scraped_Format": [
-                {
-                    'source_name': source_name,
-                    'source_type': source_type,
-                    'date': formatted_date,
-                    'cryptocurrency': cryptocurrencies,
-                    'title': title if title else "Unknown",
-                    'url': url,
-                    'text': article_text,
-                }
-            ]
+            'source_name': source_name,
+            'source_type': source_type,
+            'date': formatted_date,
+            'cryptocurrency': cryptocurrencies,
+            'title': title if title else "Unknown",
+            'url': url,
+            'text': article_text,
         }
         
     def format_date(self, raw_date):

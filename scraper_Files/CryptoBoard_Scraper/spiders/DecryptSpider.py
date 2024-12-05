@@ -120,20 +120,17 @@ class DecryptSpider(SitemapSpider):
             self.logger.info(f"Skipping article with no cryptocurrencies: {url}")
             return
 
-        # Yield the scraped data
+
         yield {
-            "Scraped_Format": [
-                {
-                    'source_name': source_name,
-                    'source_type': source_type,
-                    'date': formatted_date,
-                    'cryptocurrency': cryptocurrencies,
-                    'title': title if title else "Unknown",
-                    'url': url,
-                    'text': article_text,
-                }
-            ]
+            'source_name': source_name,
+            'source_type': source_type,
+            'date': formatted_date,
+            'cryptocurrency': cryptocurrencies,
+            'title': title if title else "Unknown",
+            'url': url,
+            'text': article_text,
         }
+
 
     def format_date_from_datetime(self, raw_date):
         try:
