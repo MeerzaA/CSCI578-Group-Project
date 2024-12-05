@@ -34,6 +34,10 @@ To Crawl this website we need to
 
 class BlockworkSpider(SitemapSpider):
    
+    def __init__(self, *args, **kwargs ):
+        super().__init__(*args, **kwargs)
+        self.out_pipe = kwargs['out_pipe']
+
     name = 'BlockworkSpider'
     allowed_domains = ['blockworks.co']
     sitemap_urls = ['https://blockworks.co/news-sitemap-index.xml']

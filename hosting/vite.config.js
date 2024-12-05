@@ -10,7 +10,6 @@ export default defineConfig({
   build: {
     outDir: "dist", // Output build files to 'hosting/dist'
   },
-  base: "",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"), // Adjust alias to match the src location

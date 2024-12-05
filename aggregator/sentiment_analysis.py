@@ -4,8 +4,6 @@ import json
 import stanza
 import re
 from threading import Thread
-from .reddit_crawler import RedditCrawler
-import logging
 
 #scrapy 
 from scrapy.crawler import CrawlerProcess
@@ -15,6 +13,11 @@ from scrapy.signalmanager import dispatcher
 # Spiders
 from scraper_Files.CryptoBoard_Scraper.spiders.BlockworkSpider import BlockworkSpider
 from scraper_Files.CryptoBoard_Scraper.spiders.DecryptSpider import DecryptSpider
+#reddit
+from aggregator.reddit_crawler import RedditCrawler
+
+import os
+import logging
 
 # Placeholder class for web crawler
 class Crawler:
@@ -36,19 +39,17 @@ class Crawler:
         self._scrapy_thread.start()
         
         # Run the Reddit crawling process.
-        self._redditCrawlThread = Thread(target=self._start_reddit_crawler)
-        self._redditCrawlThread.start()
-        
-        # Better have the threads join and end together when done
-        #self._scrapy_thread.join()
-        #self._redditCrawlThread.join()
+        #self._redditCrawlThread = Thread(target=self._start_reddit_crawler)
+        #self._redditCrawlThread.start()
 
-    def _start_scrapy_crawl(self):
-        """Internal method to run the Scrapy crawler in the background."""
-        print("Scrapy crawling started.")
-        self.crawler_process.start()  
-        print("Scrapy crawling completed.")
-        
+        # TODO: Run the scrap crawling procses
+        print("yay.")
+        settings_file_path = 'scraper_Files.CryptoBoard_Scraper.settings' # The path seen from root, ie. from main.py
+        os.environ.setdefault('SCRAPY_SETTINGS_MODULE', settings_file_path)
+        process = CrawlerProcess( get_project_settings() )
+        process.crawl( BlockworkSpider, out_pipe=self.out_pipe )
+        process.start()
+        print("double yay.")
     def _start_reddit_crawler(self):
         """Internal method to run the Reddit crawler in the background."""
         print("Reddit crawling started.")
@@ -58,9 +59,7 @@ class Crawler:
         
 #TODO: move to config file
 default_sentiment_model = "cardiffnlp/twitter-roberta-large-topic-sentiment-latest" 
-#default_summarizer_model = "human-centered-summarization/financial-summarization-pegasus"#facebook/bart-large-cnn"
-default_summarizer_model = "google/pegasus-x-large"#"human-centered-summarization/financial-summarization-pegasus"
-from transformers import AutoTokenizer, PegasusXModel,PegasusTokenizer, PegasusXForConditionalGeneration
+default_summarizer_model = "google/pegasus-x-large"
 
 key_map = { 
     # Bitcoin
@@ -159,21 +158,10 @@ class SentimentAnalyzer:
         print("---- analyzeSentiment FUNC ----")
         print(f"Input text length: {len(input_text)}")
 
-        # Extract topics from the original input text
-        found_topics = self.find_topics_strings(input_text)
-        print(f"Found topics: {found_topics}")  # Debugging line to confirm found topics
 
-        if not found_topics:
-            print("No topics found. Skipping sentiment analysis.")
-            return {}
-
-        if self.shouldSummarize(input_text):
-            summarized_text = self.text_summarizer.summarize_text(input_text, found_topics)
-            if summarized_text and len(summarized_text) > 0:
-                print("Text has been summarized.")
-                input_text = summarized_text[0]['summary_text']
-            else:
-                print("Summarization failed. Proceeding with original text.")
+        if self.shouldSummarize( input_text ):
+            summaries = self.text_summarizer.summarize_text( input_text )
+            input_text = summaries[0]['summary_text']
 
         sentiments = init_dict(found_topics)
         for topic in found_topics:
@@ -190,20 +178,19 @@ class SentimentAnalyzer:
         print(f"Sentiment analysis result: {sentiments}")
         return sentiments
 
-    def find_topics_strings(self, text):
-        print("---- find_topics_strings FUNC ----")
-        
-        target_topics = [
-            'BTC', 'ETH', 'SOL', 'XRP', 'LTC', 'DOGE', 'ADA', 'AVAX', 'SHIB',
-            'Bitcoin', 'Ethereum', 'Solana', 'Ripple', 'Litecoin', 'Dogecoin', 'BNB', 'Cardano', 'Avalanche', 'Shiba Inu'
-            ]
+    def find_topics_strings( self, text ):
 
         found_topics = []
-        text_lower = text.lower()
-        for topic in target_topics:
-            pattern = r'\b' + re.escape(topic.lower()) + r'\b'
-            if re.search(pattern, text_lower):
-                found_topics.append(topic)
+        for topic in key_map:
+
+            if topic.find('@') > 0 :
+                continue
+
+            pattern = r'\b' + topic.lower() + r'\b'
+            #print(pattern)
+            #print(text)
+            if re.search( pattern, text ) is not None:
+                found_topics.append( topic )
 
         return found_topics
     
@@ -223,45 +210,32 @@ class Aggregator:
 
 
     def parseJsonElement( self, input_data ):
-        source = input_data['source_name']
-        source_type = input_data['source_type']
-        date = input_data['date']
-        currencies = input_data['cryptocurrency']
-        title = input_data['title']
-        url = input_data['url']
-        text = input_data['text']
+        source = input_data.get('source_name', 'Unknown')
+        source_type = input_data.get('source_type', 'Unknown')
+        date = input_data.get('date', 'Unknown')
+        currencies = input_data.get('cryptocurrency', 'Unknown' )
+        title = input_data.get('title', 'Unknown')
+        url = input_data.get('url', 'Unknown' )
+        text = input_data.get('text','Unknown')
 
         return source, source_type, date, currencies, title, url, text
 
     def preprocessText( self, text ):
         return text.lower()
 
-    def processInput(self, input_data):
-        self.logger.info(f"Aggregator received input data: {input_data}")
-        for input_item in input_data:
-            try:
-                source, source_type, date, currencies, title, url, text = self.parseJsonElement(input_item)
-                self.logger.info(f"Parsed item: {input_item}")
-                text = self.preprocessText(text)
-    
-                # Analyze sentiment
-                sentiments = self.sentiment_analyzer.analyzeSentiment(currencies, title, text)
-                if sentiments is None or not sentiments:
-                    self.logger.warning(f"Sentiment analysis returned None or empty for: {input_item}")
-                else:
-                    for currency, sentiment in sentiments.items():
-                        output_item = {
-                            'currency': currency,
-                            'source_name': source,
-                            'source_type': source_type,
-                            'date': date,
-                            'title': title,
-                            'url': url,
-                            'sentiment': sentiment
-                        }
-                        self.writeToDatabase(output_item)
-            except Exception as e:
-                self.logger.error(f"Error processing input item {input_item}: {e}")
+    def processInput( self, input_data ):
+        
+        for input_item in input_data.values():
+            source, source_type, date, currencies, title, url, text = self.parseJsonElement( input_item[0] ) #Things coming from the BlockworkSpider are single-element lists
+
+            text = self.preprocessText( text )
+            print(text)
+            sentiments = self.sentiment_analyzer.analyzeSentiment( currencies, title, text )
+            print( "Sentiments: ", sentiments )
+            if sentiments is not None:
+                for currency, sentiment in sentiments.items():
+                    output_item = {'currency':currency, 'source_name': source, 'source_type': source_type, 'date':date, 'title':title, 'url':url, 'sentiment': sentiment }
+                    self.writeToDatabase( output_item )
 
     # Continue trying to read data from the pipe until Ctrl-C is pressed
     def run( self ):
@@ -269,6 +243,7 @@ class Aggregator:
             while True:
                 input_data = self.in_pipe.read()  
                 if input_data is not None:
+                    print("GOT A THING!")
                     self.processInput( input_data )
                 else:
                     print( "Waiting for data" )

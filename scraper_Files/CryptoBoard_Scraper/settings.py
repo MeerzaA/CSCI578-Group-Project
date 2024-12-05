@@ -9,8 +9,8 @@
 
 BOT_NAME = "CryptoBoard_Scraper"
 
-SPIDER_MODULES = ["CryptoBoard_Scraper.spiders"]
-NEWSPIDER_MODULE = "CryptoBoard_Scraper.spiders"
+SPIDER_MODULES = ["scraper_Files.CryptoBoard_Scraper.spiders"]
+NEWSPIDER_MODULE = "scraper_Files.CryptoBoard_Scraper.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -48,9 +48,9 @@ ROBOTSTXT_OBEY = True
 #    "CryptoBoard_Scraper.middlewares.CryptoboardScraperSpiderMiddleware": 543,
 #}
 DOWNLOADER_MIDDLEWARES = {
-    'CryptoBoard_Scraper.middlewares.RotateUserAgentMiddleware': 400,
-    'CryptoBoard_Scraper.middlewares.RetryOn429Middleware': 420,
-    'CryptoBoard_Scraper.middlewares.DelayRequestsMiddleware': 430,
+    'scraper_Files.CryptoBoard_Scraper.middlewares.RotateUserAgentMiddleware': 400,
+    'scraper_Files.CryptoBoard_Scraper.middlewares.RetryOn429Middleware': 420,
+    'scraper_Files.CryptoBoard_Scraper.middlewares.DelayRequestsMiddleware': 430,
     'scrapy_deltafetch.DeltaFetch': 100,
     'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
 }
@@ -73,7 +73,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "CryptoBoard_Scraper.pipelines.CryptoboardScraperPipeline": 300,
+    "scraper_Files.CryptoBoard_Scraper.pipelines.CryptoboardScraperPipeline": 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
