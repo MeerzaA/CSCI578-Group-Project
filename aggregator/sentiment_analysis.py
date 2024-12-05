@@ -38,13 +38,15 @@ class Crawler:
         # Run the Reddit crawling process.
         self._redditCrawlThread = Thread(target=self._start_reddit_crawler)
         self._redditCrawlThread.start()
-
-        # TODO: Run the scrap crawling procses
         
+        # Better have the threads join and end together when done
+        #self._scrapy_thread.join()
+        #self._redditCrawlThread.join()
+
     def _start_scrapy_crawl(self):
         """Internal method to run the Scrapy crawler in the background."""
         print("Scrapy crawling started.")
-        self.crawler_process.start()  # Starts both crawlers
+        self.crawler_process.start()  
         print("Scrapy crawling completed.")
         
     def _start_reddit_crawler(self):

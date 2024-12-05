@@ -32,6 +32,7 @@ if PROJECT_ROOT not in sys.path:
 
 from aggregator import Aggregator
 from aggregator import FirebaseService
+from aggregator import DataPipe
 import logging
 
 class CryptoboardScraperPipeline:
@@ -42,17 +43,28 @@ class CryptoboardScraperPipeline:
 
     def process_item(self, item, spider):
         self.logger.info(f"Processing item in pipeline: {item}")
+      
         if isinstance(item, dict):
             item = [item] 
+        
         self.aggregator.processInput(item)
+        
         return item
 
     @classmethod
     def from_crawler(cls, crawler):
+     
         firebase_service = FirebaseService(name="CryptoBoardFirebaseService")
+        
+        # Initialize the DataPipe and pass the input_pipe to the Aggregator
+        crawler_pipe = DataPipe("CrawlerPipe")
+        
+        # Initialize the Aggregator with the valid input pipe
         aggregator = Aggregator(
             name="CryptoAggregator",
-            in_pipe=None,  
-            firebase_service=firebase_service 
+            in_pipe=crawler_pipe.input_pipe,  # Pass the input_pipe here
+            firebase_service=firebase_service
         )
+        
+        # Return the pipeline instance
         return cls(aggregator)
