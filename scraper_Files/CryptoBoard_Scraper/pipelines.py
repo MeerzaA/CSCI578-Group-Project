@@ -32,9 +32,7 @@ if PROJECT_ROOT not in sys.path:
 from aggregator import Aggregator
 from aggregator import FirebaseService
 
-
 class CryptoboardScraperPipeline:
-   
 
     def process_item(self, item, spider):
         print('PROCESS ITEM!!!')
