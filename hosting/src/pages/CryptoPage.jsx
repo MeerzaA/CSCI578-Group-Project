@@ -149,26 +149,31 @@ const CryptoPage = () => {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <div className="text-center text-4xl mb-5">{name}</div>
+        <div className="text-center text-5xl mb-11">{name}</div>
 
-        <div className="grid grid-cols-7">
+        <div className="grid grid-cols-7 mb-5">
           <div></div>
           <div className="text-lg text-center">
             Latest News Impression
             <br />
-            {news_impressions.slice(-1)[0][1]}
+            <div className="text-4xl">
+              {news_impressions.slice(-1)[0][1]}
+            </div>
+            
           </div>
           <div></div>
           <div className="text-lg text-center">
             Latest Average Sentiment
             <br />
+            <div className="text-4xl">
             {state.latest_sent_score}
+            </div>
           </div>
           <div></div>
           <div className="text-lg text-center">
             Latest Social Impression
             <br />
-            {social_impressions.slice(-1)[0][1]}
+            <div className="text-4xl">{social_impressions.slice(-1)[0][1]}</div>
           </div>
           <div></div>
         </div>
@@ -181,11 +186,11 @@ const CryptoPage = () => {
               <div className="col-span-8">
                 <Graph options={news} />
               </div>
-              <div className="col-span-2 text-align mt-5">
+              <div className="col-span-2 text-align mt-5 ">
                 <ul>
                   {Object.entries(news_source).map(([key, value]) => (
                     <li key={key}>
-                      <strong>{key}:</strong> {value}
+                      {key}: {value}
                     </li>
                   ))}
                 </ul>
@@ -200,11 +205,11 @@ const CryptoPage = () => {
               <div className="col-span-8">
                 <Graph options={social_media} />
               </div>
-              <div className="col-span-2 text-align mt-5">
+              <div className="col-span-2 text-align mt-5 font-sans">
                 <ul>
                   {Object.entries(social_source).map(([key, value]) => (
                     <li key={key}>
-                      <strong>{key}:</strong> {value}
+                      {key}: {value}
                     </li>
                   ))}
                 </ul>
@@ -224,7 +229,7 @@ const CryptoPage = () => {
                   {Object.entries({ ...social_source, ...news_source }).map(
                     ([key, value]) => (
                       <li key={key}>
-                        <strong>{key}:</strong> {value}
+                        {key}: {value}
                       </li>
                     )
                   )}
