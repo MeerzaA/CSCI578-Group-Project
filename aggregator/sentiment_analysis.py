@@ -8,8 +8,6 @@ from threading import Thread
 #scrapy 
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
-from scrapy import signals
-from scrapy.signalmanager import dispatcher
 # Spiders
 from scraper_Files.CryptoBoard_Scraper.spiders.BlockworkSpider import BlockworkSpider
 from scraper_Files.CryptoBoard_Scraper.spiders.DecryptSpider import DecryptSpider

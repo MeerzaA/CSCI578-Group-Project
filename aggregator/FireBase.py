@@ -53,7 +53,7 @@ class FirebaseService:
                     self.logger.error(f"Missing required key: {key} in output data. Skipping push to Firebase.")
                     return  
 
-           # check for values thaat say unknown
+            # check for values that say 'Unknown'
             if output_data['currency'] == 'Unknown' or output_data['date'] == 'Unknown':
                 self.logger.error("Invalid data: currency or date is 'Unknown'. Skipping push to Firebase.")
                 return
@@ -63,10 +63,33 @@ class FirebaseService:
                     self.logger.error(f"Invalid data: {key} is 'Unknown'. Skipping push to Firebase.")
                     return
 
+            # Process and push data to Firebase
             currency = output_data['currency']
             date = output_data['date']
             del output_data['currency']
             del output_data['date']
+
+            current_count = self.counts[currency].get(date, 0)
+
+            tag = currency + f"/{date}/{current_count+1}"
+            ref = db.reference(tag)
+            ref.update(output_data)
+
+            self.counts[currency][date] = current_count + 1
+
+            print("New data has been added to the database.")
+
+            # Set the final count and store the data
+            count = self.counts[currency][date]
+            tag = f"{currency}/{date}/{count}"
+            ref = db.reference(tag)
+            ref.set(output_data)
+
+            self.logger.info(f"New data added to Firebase under {tag}: {output_data}")
+
+        except Exception as e:
+            self.logger.error(f"Failed to write data to Firebase: {e}")
+
 
     def get_count_for_tag( self, tag ):
         ref = db.reference( tag ) 
@@ -78,27 +101,30 @@ class FirebaseService:
             return None, 0
         
     def put_crypto_data(self, output_data):
-        currency = output_data['currency']
-        date = output_data['date']
-        del output_data['currency'] 
-        del output_data['date']
-        current_count = self.counts[currency].get(date, 0)
-        tag = currency + f"/{date}/{current_count+1}"
-        ref = db.reference( tag )
-        ref.update( output_data )
-        self.counts[currency][date] = current_count + 1
         
-        print("New data has been added to the database.")
-
-            self.counts[currency][date] += 1
-            count = self.counts[currency][date]
-
-            tag = f"{currency}/{date}/{count}"
+            currency = output_data['currency']
+            date = output_data['date']
+            
+            del output_data['currency']
+            del output_data['date']
+            
+            current_count = self.counts[currency].get(date, 0)
+            
+            tag = currency + f"/{date}/{current_count+1}"
             
             ref = db.reference(tag)
+            
+            ref.update(output_data)
 
-            ref.set(output_data)  
+            self.counts[currency][date] = current_count + 1
+            
+            print("New data has been added to the database.")
+            
+            count = self.counts[currency][date]
+            tag = f"{currency}/{date}/{count}"
+
+            ref = db.reference(tag)
+            ref.set(output_data)
+            
             self.logger.info(f"New data added to Firebase under {tag}: {output_data}")
-        except Exception as e:
-            self.logger.error(f"Failed to write data to Firebase: {e}")
-
+        
