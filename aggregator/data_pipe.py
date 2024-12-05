@@ -8,21 +8,23 @@ class DataPipe:
     class OutputDataPipe:
 
         def write( self, item ):
-            print("\n\n\nWROTE ITEM TO PIPE\n\n\n")
             self.queue.put( item ) 
+            print("\n\n\nWROTE ITEM TO PIPE\n\n\n")
 
         def __init__( self, queue ):
-            self.queue = Queue()
+            self.queue = queue
             
     # The end of the pipe from which a compenent gets its input data
     class InputDataPipe:
 
         def read( self ):
            
-            if len( self.queue ) > 0:
-                return self.queue.get()
+            if self.queue.empty():
+                return None
+
+            print("\n\n\nREAD ITEM FROM PIPE\n\n\n")
+            return self.queue.get()
             
-            return None
 
         def __init__( self, queue ):
             self.queue = queue
@@ -31,7 +33,7 @@ class DataPipe:
     def __init__( self, name ):
         print( f"{name} initializing" )
         self.name = name
-        self.queue = []
+        self.queue = Queue()
         self.output_pipe = self.OutputDataPipe( self.queue )
         self.input_pipe = self.InputDataPipe( self.queue )
         print( f"{name} initialized" )

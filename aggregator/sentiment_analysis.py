@@ -4,7 +4,14 @@ import json
 import stanza
 import re
 from threading import Thread
-from reddit_crawler import RedditCrawler
+from aggregator.reddit_crawler import RedditCrawler
+
+import scrapy
+from scrapy.crawler import CrawlerProcess
+from scrapy.utils.project import get_project_settings
+
+from scraper_Files.CryptoBoard_Scraper.spiders.BlockworkSpider import BlockworkSpider
+import os
 
 # Placeholder class for web crawler
 class Crawler:
@@ -19,10 +26,17 @@ class Crawler:
         
     def run( self ):
         # Run the Reddit crawling process.
-        self._redditCrawlThread = Thread(target=self._start_reddit_crawler)
-        self._redditCrawlThread.start()
+        #self._redditCrawlThread = Thread(target=self._start_reddit_crawler)
+        #self._redditCrawlThread.start()
 
         # TODO: Run the scrap crawling procses
+        print("yay.")
+        settings_file_path = 'scraper_Files.CryptoBoard_Scraper.settings' # The path seen from root, ie. from main.py
+        os.environ.setdefault('SCRAPY_SETTINGS_MODULE', settings_file_path)
+        process = CrawlerProcess( get_project_settings() )
+        process.crawl( BlockworkSpider, out_pipe=self.out_pipe )
+        process.start()
+        print("double yay.")
 
     def _start_reddit_crawler(self):
         """Internal method to run the Reddit crawler in the background."""
@@ -33,11 +47,40 @@ class Crawler:
         
 #TODO: move to config file
 default_sentiment_model = "cardiffnlp/twitter-roberta-large-topic-sentiment-latest" 
-#default_summarizer_model = "human-centered-summarization/financial-summarization-pegasus"#facebook/bart-large-cnn"
-default_summarizer_model = "google/pegasus-x-large"#"human-centered-summarization/financial-summarization-pegasus"
-from transformers import AutoTokenizer, PegasusXModel,PegasusTokenizer, PegasusXForConditionalGeneration
+default_summarizer_model = "google/pegasus-x-large"
+key_map = {
+        'Bitcoin': 'Bitcoin',
+        'BTC': 'Bitcoin',
+        '@BTC': 'Bitcoin',
+        'Ethereum': 'Ethereum',
+        'ETH': 'Ethereum',
+        '@ETH': 'Ethereum',
+        'Solana': 'Solana',
+        'SOL': 'Solana',
+        '@SOL': 'Solana',
+        'Ripple': 'Ripple',
+        'XRP': 'Ripple',
+        '@XRP': 'Ripple',
+        'Litecoin': 'Litecoin',
+        'LTC': 'Litecoin',
+        '@LTC': 'Litecoin',
+        'Dogecoin': 'Dogecoin',
+        'DOGE': 'Dogecoin',
+        '@DOGE': 'Dogecoin',
+        'Binance Coin': 'Binance Coin',
+        'BNB': 'BNB',
+        '@BNB': 'BNB',
+        'Cardano': 'Cardano',
+        'ADA': 'Cardano',
+        '@ADA': 'Cardano',
+        'Avalanche': 'Avalanche',
+        'AVAX': 'Avalanche',
+        '@AVAX': 'Avalanche',
+        'Shiba Inu': 'Shiba Inu',
+        'SHIB': 'Shiba Inu',
+        '@SHIB': 'Shiba Inu'
+    }
 
-key_map = { 'BTC':'Bitcoin', '@BTC':'Bitcoin','Bitcoin':'Bitcoin', 'ETH':'Ethereum', '@ETH':'Ethereum', 'Ethereum':'Ethereum', 'SOL':'Solana', '@SOL':'Solana', 'Solana':'Solana' }
 def init_list_dict( keys ):
     return { key_map[key]: [] for key in keys }
 
@@ -98,9 +141,8 @@ class SentimentAnalyzer:
     def analyzeSentiment( self, topic_list, title, input_text ):
 
         if self.shouldSummarize( input_text ):
-            return None
-            #summaries = self.text_summarizer.summarize_text( input_text )
-            #input_text = summaries[0]['summary_text']
+            summaries = self.text_summarizer.summarize_text( input_text )
+            input_text = summaries[0]['summary_text']
 
         found_topics = self.find_topics_strings( input_text )
 
@@ -114,10 +156,13 @@ class SentimentAnalyzer:
 
 
     def find_topics_strings( self, text ):
-        target_topics = ['BTC', 'ETH', "SOL", "Bitcoin", "Ethereum", "Solana"]
 
         found_topics = []
-        for topic in target_topics:
+        for topic in key_map:
+
+            if topic.find('@') > 0 :
+                continue
+
             pattern = r'\b' + topic.lower() + r'\b'
             #print(pattern)
             #print(text)
@@ -137,13 +182,13 @@ class Aggregator:
         self.firebase_service.put_crypto_data( output_item )
 
     def parseJsonElement( self, input_data ):
-        source = input_data['source_name']
-        source_type = input_data['source_type']
-        date = input_data['date']
-        currencies = input_data['cryptocurrency']
-        title = input_data['title']
-        url = input_data['url']
-        text = input_data['text']
+        source = input_data.get('source_name', 'Unknown')
+        source_type = input_data.get('source_type', 'Unknown')
+        date = input_data.get('date', 'Unknown')
+        currencies = input_data.get('cryptocurrency', 'Unknown' )
+        title = input_data.get('title', 'Unknown')
+        url = input_data.get('url', 'Unknown' )
+        text = input_data.get('text','Unknown')
 
         return source, source_type, date, currencies, title, url, text
 
@@ -151,17 +196,18 @@ class Aggregator:
         return text.lower()
 
     def processInput( self, input_data ):
+        
+        for input_item in input_data.values():
+            source, source_type, date, currencies, title, url, text = self.parseJsonElement( input_item[0] ) #Things coming from the BlockworkSpider are single-element lists
 
-        for input_item in input_data:
-           source, source_type, date, currencies, title, url, text = self.parseJsonElement( input_item )
-
-           text = self.preprocessText( text )
-
-           sentiments = self.sentiment_analyzer.analyzeSentiment( currencies, title, text )
-           if sentiments is not None:
-               for currency, sentiment in sentiments.items():
-                   output_item = {'currency':currency, 'source_name': source, 'source_type': source_type, 'date':date, 'title':title, 'url':url, 'sentiment': sentiment }
-                   self.writeToDatabase( output_item )
+            text = self.preprocessText( text )
+            print(text)
+            sentiments = self.sentiment_analyzer.analyzeSentiment( currencies, title, text )
+            print( "Sentiments: ", sentiments )
+            if sentiments is not None:
+                for currency, sentiment in sentiments.items():
+                    output_item = {'currency':currency, 'source_name': source, 'source_type': source_type, 'date':date, 'title':title, 'url':url, 'sentiment': sentiment }
+                    self.writeToDatabase( output_item )
 
     # Continue trying to read data from the pipe until Ctrl-C is pressed
     def run( self ):
@@ -169,6 +215,7 @@ class Aggregator:
             while True:
                 input_data = self.in_pipe.read()  
                 if input_data is not None:
+                    print("GOT A THING!")
                     self.processInput( input_data )
                 else:
                     print( "Waiting for data" )

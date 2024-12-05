@@ -35,20 +35,8 @@ from aggregator import FirebaseService
 
 class CryptoboardScraperPipeline:
    
-    def __init__(self, aggregator):
-        self.aggregator = aggregator
 
     def process_item(self, item, spider):
-       
-        self.aggregator.processInput(item)
+        print('PROCESS ITEM!!!')
+        spider.out_pipe.write( item )
         return item
-
-    @classmethod
-    def from_crawler(cls, crawler):
-        firebase_service = FirebaseService(name="CryptoBoardFirebaseService")
-        aggregator = Aggregator(
-            name="CryptoAggregator",
-            in_pipe=None, 
-            firebase_service=firebase_service 
-        )
-        return cls(aggregator)
