@@ -6,6 +6,7 @@ import datetime
 import copy
 
 OUTPUT_DIR = "../scrape_results"
+MIN_COMMENTS = 20
 
 reddit = praw.Reddit(
     client_id="f_pgbg_ASrz1R3OMw_mFbg",
@@ -29,7 +30,8 @@ CRYPTOCURRENCIES = (
     {
         'name': 'XRP',
         'search': 'xrp',
-        'symbol': 'XRP'
+        'symbol': 'XRP',
+        'sub': 'xrp'
     },
     {
         'name': 'TetherUS',
@@ -39,34 +41,39 @@ CRYPTOCURRENCIES = (
     {
         'name': 'Solana',
         'search': 'solana',
-        'symbol': 'SOL'
+        'symbol': 'SOL ',
+        'sub': 'solana'
     },
     {
         'name': 'BNB',
         'search': 'bnb',
-        'symbol': 'BNB'
+        'symbol': 'BNB',
+        'sub': 'bnbchainofficial'
     },
     {
         'name': 'Dogecoin',
         'search': 'dogecoin',
-        'symbol': 'DOGE'
+        'symbol': 'DOGE',
+        'sub': 'dogecoin'
     },
     {
         'name': 'Cardano',
         'search': 'cardano',
-        'symbol': 'ADA'
+        'symbol': 'ADA',
+        'sub': 'cardano'
     },
     {
         'name': 'USD Coin',
         'search': 'usdc',
-        'symbol': 'USDC'
+        'symbol': 'USDC',
+        'sub': 'usdc'
     },
     {
         'name': 'Avalanche',
         'search': 'avalanche',
-        'symbol': 'AVAX'
+        'symbol': 'AVAX',
+        'sub': 'Avax'
     })
-
 
 scraped_data = {"Scraped_Format": []}
 json_template = {
@@ -80,42 +87,52 @@ json_template = {
 }
 
 
-for currency in CRYPTOCURRENCIES:
-    search_name = currency["search"].lower()
-    lower_symbol = currency["symbol"].lower()
-
-    json_template["cryptocurrency"] = [currency["name"]]
-
+def collect_comments(search_results, filter_title=True):
     num_comments = 0
-    filter_index = 0
-    filters = ("week", "month", "year", "all")
-    #record at least one comment, if not widen search time range
-    while num_comments < 1 and filter_index < len(filters):
-        for post in subreddit.search(search_name, sort="new", time_filter=filters[filter_index]):
+    for post in search_results:
 
+        if filter_title:
             # only consider titles directly mentioning the currency
             lower_title = post.title.lower()
             if not (lower_symbol in lower_title or search_name in lower_title):
                 continue
 
-            json_template["title"] = post.title
-            json_template["date"] = datetime.datetime.fromtimestamp(post.created_utc).strftime("%Y-%m-%d")
-            json_template["url"] = post.url
+        json_template["title"] = post.title
+        json_template["date"] = datetime.datetime.fromtimestamp(post.created_utc).strftime("%Y-%m-%d")
+        json_template["url"] = post.url
 
-            for comment in post.comments:
-                if type(comment) is not praw.models.Comment:
-                    continue
+        for comment in post.comments:
+            if type(comment) is not praw.models.Comment:
+                continue
 
-                # only consider posts directly mentioning the currency
-                lower_body = comment.body.lower()
-                if not (lower_symbol in lower_body or search_name in lower_body):
-                    continue
+            if comment.author and comment.author.name.lower() == "automoderator":
+                continue
 
-                json_template["text"] = comment.body
-                scraped_data["Scraped_Format"].append(copy.deepcopy(json_template))
-                num_comments += 1
-        filter_index += 1
-    print(f"{num_comments} comments recorded for {currency["name"]}")
+            # only consider posts directly mentioning the currency
+            lower_body = comment.body.lower()
+            if not (lower_symbol in lower_body or search_name in lower_body):
+                continue
+
+            json_template["text"] = comment.body
+            scraped_data["Scraped_Format"].append(copy.deepcopy(json_template))
+            num_comments += 1
+    return num_comments
+
+
+#collect comments for all cryptos
+for currency in CRYPTOCURRENCIES:
+    search_name = currency["search"].lower()
+    lower_symbol = currency["symbol"].lower()
+    currency_name = currency["name"]
+    json_template["cryptocurrency"] = [currency_name]
+
+    # record at least 20 comments, if not search the specific subreddit
+    comment_count = collect_comments(subreddit.search(search_name, sort="new", time_filter="week"))
+    if comment_count < 20 and "sub" in currency.keys():
+        backup_sub = reddit.subreddit(currency["sub"])
+        comment_count += collect_comments(backup_sub.top(time_filter="week"), filter_title=True)
+
+    print(f"{comment_count} comments recorded for {currency_name}")
 
 # Set the output directory relative to the spider's directory
 output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), OUTPUT_DIR))
