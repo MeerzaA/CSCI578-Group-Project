@@ -87,15 +87,14 @@ json_template = {
 }
 
 
-def collect_comments(search_results, filter_title=True):
+def collect_comments(search_results):
     num_comments = 0
     for post in search_results:
 
-        if filter_title:
-            # only consider titles directly mentioning the currency
-            lower_title = post.title.lower()
-            if not (lower_symbol in lower_title or search_name in lower_title):
-                continue
+        # only consider titles directly mentioning the currency
+        lower_title = post.title.lower()
+        if not (lower_symbol in lower_title or search_name in lower_title):
+            continue
 
         json_template["title"] = post.title
         json_template["date"] = datetime.datetime.fromtimestamp(post.created_utc).strftime("%Y-%m-%d")
@@ -128,9 +127,9 @@ for currency in CRYPTOCURRENCIES:
 
     # record at least 20 comments, if not search the specific subreddit
     comment_count = collect_comments(subreddit.search(search_name, sort="new", time_filter="week"))
-    if comment_count < 20 and "sub" in currency.keys():
+    if comment_count < MIN_COMMENTS and "sub" in currency.keys():
         backup_sub = reddit.subreddit(currency["sub"])
-        comment_count += collect_comments(backup_sub.top(time_filter="week"), filter_title=True)
+        comment_count += collect_comments(backup_sub.top(time_filter="week"))
 
     print(f"{comment_count} comments recorded for {currency_name}")
 
