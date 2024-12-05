@@ -157,6 +157,7 @@ class SentimentAnalyzer:
         print("---- analyzeSentiment FUNC ----")
         print(f"Input text length: {len(input_text)}")
 
+        found_topics = self.find_topics_strings(topic_list)
 
         if self.shouldSummarize( input_text ):
             summaries = self.text_summarizer.summarize_text( input_text )
