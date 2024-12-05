@@ -31,6 +31,10 @@ To Crawl this website we need to
 
 class DecryptSpider(SitemapSpider):
     
+    def __init__(self, *args, **kwargs ):
+        super().__init__(*args, **kwargs)
+        self.out_pipe = kwargs['out_pipe']
+    
     name = "DecryptSpider"
     allowed_domains = ["decrypt.co"]
     sitemap_urls = ["https://decrypt.co/sitemap_index.xml"] 
