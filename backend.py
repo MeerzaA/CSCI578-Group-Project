@@ -12,21 +12,10 @@ from aggregator.sentiment_analysis import Crawler
 #default_model="siebert/sentiment-roberta-large-english" #Correctly classifies tricky cases, but fails neutral.
 #default_model="distilbert/distilbert-base-uncased-finetuned-sst-2-english" wrong a lot
 
-def main():
-
-    #
-    # Totally dumb and synchronous for now. Just create the pipe and put hard-coded data on it. Then
-    # read the data from the queue, perform sentiment analysis and write the output to the database.
-    #
-    
-    #Spiders 
-    #Blockworks Spider 
-
-    
+def main():    
     crawler_pipe = DataPipe( "CrawlerPipe" )
     ds = Crawler( "Crawler", crawler_pipe.output_pipe )
-    #firebase = FirebaseService( "FirebaseService" )
-    firebase = None
+    firebase = FirebaseService( "FirebaseService" )
     agg = Aggregator( "Aggregator", crawler_pipe.input_pipe, firebase )
     
     ds.run()
