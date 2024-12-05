@@ -7,6 +7,16 @@ import { useNavigate } from "react-router-dom";
 import Graph from "../components/Graph";
 import { Button } from "../components/ui/button";
 
+//breadcrumb
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+
 //TODO: Grab Graph Data Here (frequency from News, Frequency from Social Media, Sentiment over Time)
 
 const CryptoPage = () => {
@@ -23,7 +33,7 @@ const CryptoPage = () => {
   let social_impressions = [];
   let social_source = {};
   let news_impressions = [];
-  let news_source = {}
+  let news_source = {};
 
   for (const date in state.info) {
     let social_counter = 0;
@@ -127,21 +137,38 @@ const CryptoPage = () => {
   return (
     <>
       <div className="m-5">
-        <Button onClick={handleButtonClick}>Home</Button>
-        <div className="text-center">{name}</div>
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{name}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+
+        <div className="text-center text-4xl mb-5">{name}</div>
 
         <div className="grid grid-cols-7">
           <div></div>
           <div className="text-lg text-center">
-            Latest News Impression<br/>{news_impressions.slice(-1)[0][1]}
+            Latest News Impression
+            <br />
+            {news_impressions.slice(-1)[0][1]}
           </div>
           <div></div>
           <div className="text-lg text-center">
-            Latest Average Sentiment<br/>{state.latest_sent_score}
+            Latest Average Sentiment
+            <br />
+            {state.latest_sent_score}
           </div>
           <div></div>
           <div className="text-lg text-center">
-            Latest Social Impression<br/>{social_impressions.slice(-1)[0][1]}
+            Latest Social Impression
+            <br />
+            {social_impressions.slice(-1)[0][1]}
           </div>
           <div></div>
         </div>
@@ -194,11 +221,13 @@ const CryptoPage = () => {
               </div>
               <div className="col-span-2 text-align mt-5">
                 <ul>
-                  {Object.entries({...social_source, ...news_source}).map(([key, value]) => (
-                    <li key={key}>
-                      <strong>{key}:</strong> {value}
-                    </li>
-                  ))}
+                  {Object.entries({ ...social_source, ...news_source }).map(
+                    ([key, value]) => (
+                      <li key={key}>
+                        <strong>{key}:</strong> {value}
+                      </li>
+                    )
+                  )}
                 </ul>
               </div>
             </div>
