@@ -23,7 +23,7 @@ class RedditCrawler:
             },
             {
                 'name': 'Bitcoin',
-                'search': 'bitcoin',
+                'search': 'bitcoin btc',
                 'symbol': 'BTC'
             },
             {
