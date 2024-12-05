@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 
 //components
 import Graph from "../components/Graph";
-import { Button } from "../components/ui/button";
 
 //breadcrumb
 import {
@@ -28,7 +27,6 @@ const CryptoPage = () => {
     navigate(`/`);
   };
 
-  console.log(state);
 
   let social_impressions = [];
   let social_source = {};
@@ -62,7 +60,6 @@ const CryptoPage = () => {
     social_impressions.push([epoch_date, social_counter]);
     news_impressions.push([epoch_date, news_counter]);
   }
-  console.log(social_source);
 
   let avg_sent_scores = [];
 
@@ -149,25 +146,25 @@ const CryptoPage = () => {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <div className="text-center text-5xl mb-11">{name}</div>
+        <div className="flex justify-center items-center text-5xl mb-11">
+          <div className="mr-5">
+            <img style={{ height: 100, width: 100 }} src={`src/assets/${name}.svg`}></img>
+          </div>
+          <div>{name}</div>
+        </div>
 
         <div className="grid grid-cols-7 mb-5">
           <div></div>
           <div className="text-lg text-center">
             Latest News Impression
             <br />
-            <div className="text-4xl">
-              {news_impressions.slice(-1)[0][1]}
-            </div>
-            
+            <div className="text-4xl">{news_impressions.slice(-1)[0][1]}</div>
           </div>
           <div></div>
           <div className="text-lg text-center">
             Latest Average Sentiment
             <br />
-            <div className="text-4xl">
-            {state.latest_sent_score}
-            </div>
+            <div className="text-4xl">{state.latest_sent_score}</div>
           </div>
           <div></div>
           <div className="text-lg text-center">

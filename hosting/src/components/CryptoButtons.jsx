@@ -68,7 +68,7 @@ const CryptoButtons = () => {
     fetchData();
   }, []);
   let content;
-  console.log(data.length);
+  
   if (data.length != 0) {
     content = <DataTable columns={columns} data={data} />;
   } else {
