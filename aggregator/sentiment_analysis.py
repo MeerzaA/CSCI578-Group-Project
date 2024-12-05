@@ -37,7 +37,7 @@ class Crawler:
         # Start Scrapy crawl process 
         self._scrapy_thread = Thread(target=self._start_scrapy_crawl)
         self._scrapy_thread.start()
-        
+
         # Run the Reddit crawling process.
         #self._redditCrawlThread = Thread(target=self._start_reddit_crawler)
         #self._redditCrawlThread.start()
@@ -50,6 +50,13 @@ class Crawler:
         process.crawl( BlockworkSpider, out_pipe=self.out_pipe )
         process.start()
         print("double yay.")
+        
+    def _start_scrapy_crawl(self):
+        """Internal method to run the Scrapy crawler in the background."""
+        print("Scrapy crawling started.")
+        self.crawler_process.start()
+        print("Scrapy crawling completed.")
+        
     def _start_reddit_crawler(self):
         """Internal method to run the Reddit crawler in the background."""
         print("Reddit crawling started.")
