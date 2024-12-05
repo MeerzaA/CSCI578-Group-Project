@@ -21,8 +21,15 @@ git clone https://github.com/MeerzaA/CSCI578-Group-Project.git
 # Navigate to the project directory
 cd CSCI578-Group-Project
 
-# Install dependencies
-npm install
+# Build the docker image 
+docker-compose build
+
+# Run the project
+docker-compose up
+
+# Access the site locally in a web browser
+
+
 
 ```
 ---
