@@ -5,7 +5,16 @@ import { useNavigate } from "react-router-dom";
 
 //components
 import Graph from "../components/Graph";
-import { Button } from "../components/ui/button";
+
+//breadcrumb
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 //TODO: Grab Graph Data Here (frequency from News, Frequency from Social Media, Sentiment over Time)
 
@@ -18,12 +27,10 @@ const CryptoPage = () => {
     navigate(`/`);
   };
 
-  console.log(state);
-
   let social_impressions = [];
   let social_source = {};
   let news_impressions = [];
-  let news_source = {}
+  let news_source = {};
 
   for (const date in state.info) {
     let social_counter = 0;
@@ -52,7 +59,6 @@ const CryptoPage = () => {
     social_impressions.push([epoch_date, social_counter]);
     news_impressions.push([epoch_date, news_counter]);
   }
-  console.log(social_source);
 
   let avg_sent_scores = [];
 
@@ -61,8 +67,7 @@ const CryptoPage = () => {
     for (const key in state.info[date]) {
       sent_scores.push(state.info[date][key].sentiment);
     }
-    let avg_sent_score =
-      sent_scores.reduce((a, b) => a + b) / sent_scores.length;
+    let avg_sent_score = sent_scores.reduce((a, b) => a + b) / sent_scores.length;
 
     let date_object = new Date(date);
     let epoch_date = date_object.getTime();
@@ -127,21 +132,43 @@ const CryptoPage = () => {
   return (
     <>
       <div className="m-5">
-        <Button onClick={handleButtonClick}>Home</Button>
-        <div className="text-center">{name}</div>
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{name}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
-        <div className="grid grid-cols-7">
+        <div className="flex justify-center items-center text-5xl mb-11">
+          <div className="mr-5">
+            <img style={{ height: 100, width: 100 }} src={`/${name}.svg`}></img>
+          </div>
+          <div>{name}</div>
+        </div>
+
+        <div className="grid grid-cols-7 mb-5">
           <div></div>
           <div className="text-lg text-center">
-            Latest News Impression<br/>{news_impressions.slice(-1)[0][1]}
+            Latest News Impression
+            <br />
+            <div className="text-4xl">{news_impressions.slice(-1)[0][1]}</div>
           </div>
           <div></div>
           <div className="text-lg text-center">
-            Latest Average Sentiment<br/>{state.latest_sent_score}
+            Latest Average Sentiment
+            <br />
+            <div className="text-4xl">{state.latest_sent_score}</div>
           </div>
           <div></div>
           <div className="text-lg text-center">
-            Latest Social Impression<br/>{social_impressions.slice(-1)[0][1]}
+            Latest Social Impression
+            <br />
+            <div className="text-4xl">{social_impressions.slice(-1)[0][1]}</div>
           </div>
           <div></div>
         </div>
@@ -154,11 +181,11 @@ const CryptoPage = () => {
               <div className="col-span-8">
                 <Graph options={news} />
               </div>
-              <div className="col-span-2 text-align mt-5">
+              <div className="col-span-2 text-align mt-5 ">
                 <ul>
                   {Object.entries(news_source).map(([key, value]) => (
                     <li key={key}>
-                      <strong>{key}:</strong> {value}
+                      {key}: {value}
                     </li>
                   ))}
                 </ul>
@@ -173,11 +200,11 @@ const CryptoPage = () => {
               <div className="col-span-8">
                 <Graph options={social_media} />
               </div>
-              <div className="col-span-2 text-align mt-5">
+              <div className="col-span-2 text-align mt-5 font-sans">
                 <ul>
                   {Object.entries(social_source).map(([key, value]) => (
                     <li key={key}>
-                      <strong>{key}:</strong> {value}
+                      {key}: {value}
                     </li>
                   ))}
                 </ul>
@@ -194,9 +221,9 @@ const CryptoPage = () => {
               </div>
               <div className="col-span-2 text-align mt-5">
                 <ul>
-                  {Object.entries({...social_source, ...news_source}).map(([key, value]) => (
+                  {Object.entries({ ...social_source, ...news_source }).map(([key, value]) => (
                     <li key={key}>
-                      <strong>{key}:</strong> {value}
+                      {key}: {value}
                     </li>
                   ))}
                 </ul>

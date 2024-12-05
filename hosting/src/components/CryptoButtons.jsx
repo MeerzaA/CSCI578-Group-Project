@@ -5,6 +5,8 @@ import { DataTable } from "./payments/data-table";
 import { useState, useEffect } from "react";
 import { getDatabase, ref, onValue } from "firebase/database";
 
+import { Skeleton } from "@/components/ui/skeleton";
+
 //TODO: Grab Name and sentiment from FireBase
 
 const CryptoButtons = () => {
@@ -41,7 +43,8 @@ const CryptoButtons = () => {
             for (const key in crypto_data[latest_date]) {
               sent_scores.push(crypto_data[latest_date][key].sentiment);
             }
-            let avg_sent_score = sent_scores.reduce((a, b) => a + b) / sent_scores.length;
+            let avg_sent_score =
+              sent_scores.reduce((a, b) => a + b) / sent_scores.length;
 
             avg_sent_score = avg_sent_score.toFixed(1);
 
@@ -64,12 +67,23 @@ const CryptoButtons = () => {
     };
     fetchData();
   }, []);
+  let content;
+  
+  if (data.length != 0) {
+    content = <DataTable columns={columns} data={data} />;
+  } else {
+    content = (
+      <div className="flex flex-col space-y-3">
+        <Skeleton className="h-[125px] w-[320px] rounded-xl" />
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-[250px]" />
+          <Skeleton className="h-4 w-[200px]" />
+        </div>
+      </div>
+    );
+  }
 
-  return (
-    <>
-      <DataTable columns={columns} data={data} />
-    </>
-  );
+  return <>{content}</>;
 };
 
 export default CryptoButtons;
