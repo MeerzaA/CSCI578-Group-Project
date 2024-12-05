@@ -23,16 +23,19 @@ class Crawler:
     def __init__( self, name, out_pipe ):
         self.out_pipe = out_pipe
         self.name = name
+        settings_file_path = 'scraper_Files.CryptoBoard_Scraper.settings' # The path seen from root, ie. from main.py
+        os.environ.setdefault('SCRAPY_SETTINGS_MODULE', settings_file_path)
         self.crawler_process = CrawlerProcess(get_project_settings()) 
-        self.crawler_process.crawl(BlockworkSpider)  
-        self.crawler_process.crawl(DecryptSpider)
+        self.crawler_process.crawl(BlockworkSpider, out_pipe=self.out_pipe)  
+        self.crawler_process.crawl(DecryptSpider, out_pipe=self.out_pipe)
 
     def send( self, item ):
         """Send an item to the output pipe."""
         self.out_pipe.write( item )
         
     def run( self ):
-        # Start Scrapy crawl process 
+        
+        # Run Scrapy crawl process 
         self._scrapy_thread = Thread(target=self._start_scrapy_crawl)
         self._scrapy_thread.start()
 
@@ -40,15 +43,6 @@ class Crawler:
         #self._redditCrawlThread = Thread(target=self._start_reddit_crawler)
         #self._redditCrawlThread.start()
 
-        # TODO: Run the scrap crawling procses
-        print("yay.")
-        settings_file_path = 'scraper_Files.CryptoBoard_Scraper.settings' # The path seen from root, ie. from main.py
-        os.environ.setdefault('SCRAPY_SETTINGS_MODULE', settings_file_path)
-        process = CrawlerProcess( get_project_settings() )
-        process.crawl( BlockworkSpider, out_pipe=self.out_pipe )
-        process.start()
-        print("double yay.")
-        
     def _start_scrapy_crawl(self):
         """Internal method to run the Scrapy crawler in the background."""
         print("Scrapy crawling started.")
@@ -80,7 +74,7 @@ key_map = {
     # Dogecoin
     'Dogecoin': 'Dogecoin', 'DOGE': 'Dogecoin', '@DOGE': 'Dogecoin',
     # Binance Coin
-    'BNB': 'BNB', '@BNB': 'BNB',
+    'BNB': 'Binance Coin', '@BNB': 'BInance Coin', 'Binance Coin': 'Binanca Coin',
     # Cardano
     'Cardano': 'Cardano', 'ADA': 'Cardano', '@ADA': 'Cardano',
     # Avalanche

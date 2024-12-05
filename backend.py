@@ -16,7 +16,7 @@ def main():
     crawler_pipe = DataPipe( "CrawlerPipe" )
     ds = Crawler( "Crawler", crawler_pipe.output_pipe )
     firebase = FirebaseService( "FirebaseService" )
-    agg = Aggregator( "Aggregator", crawler_pipe.input_pipe, firebase )
+    agg = Aggregator("Aggregator", in_pipe=crawler_pipe.input_pipe, firebase_service=firebase)
     
     ds.run()
     agg.run()

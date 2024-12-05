@@ -53,14 +53,16 @@ class DecryptSpider(SitemapSpider):
         'LTC': 'Litecoin',
         'Dogecoin': 'Dogecoin',
         'DOGE': 'Dogecoin',
-        'BNB': 'BNB',
-        'Cardano': 'ADA',
+        'Binance Coin': 'Binance Coin',
+        'BNB' : 'Binance Coin',
+        'Cardano': 'Cardano',
         'ADA': 'Cardano',
-        'Avalanche': 'AVAX',
+        'Avalanche': 'Avalanche',
         'AVAX': 'Avalanche',
-        'Shiba Inu': 'SHIB',
+        'Shiba Inu': 'Shiba Inu',
         'SHIB': 'Shiba Inu',
     }
+
     
     custom_settings = {
         
@@ -115,6 +117,8 @@ class DecryptSpider(SitemapSpider):
         paragraphs = response.xpath(text_xpath).getall()
         article_text = " ".join([p.strip() for p in paragraphs])
 
+
+                    
         # Extract mentioned cryptocurrencies
         cryptocurrencies = self.extract_cryptocurrencies(article_text)
         self.logger.info(f"Cryptocurrencies extracted: {cryptocurrencies}")
@@ -126,13 +130,17 @@ class DecryptSpider(SitemapSpider):
 
 
         yield {
-            'source_name': source_name,
-            'source_type': source_type,
-            'date': formatted_date,
-            'cryptocurrency': cryptocurrencies,
-            'title': title if title else "Unknown",
-            'url': url,
-            'text': article_text,
+            "Scraper_Format": [ 
+                {
+                    'source_name': source_name,
+                    'source_type': source_type,
+                    'date': formatted_date,
+                    'cryptocurrency': cryptocurrencies,
+                    'title': title if title else "Unknown",
+                    'url': url,
+                    'text': article_text,
+                } 
+            ]
         }
 
 

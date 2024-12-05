@@ -56,12 +56,13 @@ class BlockworkSpider(SitemapSpider):
         'LTC': 'Litecoin',
         'Dogecoin': 'Dogecoin',
         'DOGE': 'Dogecoin',
-        'BNB': 'BNB',
-        'Cardano': 'ADA',
+        'Binance Coin': 'Binance Coin',
+        'BNB' : 'Binance Coin',
+        'Cardano': 'Cardano',
         'ADA': 'Cardano',
-        'Avalanche': 'AVAX',
+        'Avalanche': 'Avalanche',
         'AVAX': 'Avalanche',
-        'Shiba Inu': 'SHIB',
+        'Shiba Inu': 'Shiba Inu',
         'SHIB': 'Shiba Inu',
     }
 
@@ -107,14 +108,19 @@ class BlockworkSpider(SitemapSpider):
             return
 
         yield {
-            'source_name': source_name,
-            'source_type': source_type,
-            'date': formatted_date,
-            'cryptocurrency': cryptocurrencies,
-            'title': title if title else "Unknown",
-            'url': url,
-            'text': article_text,
+            "Scraper_Format": [ 
+                {
+                    'source_name': source_name,
+                    'source_type': source_type,
+                    'date': formatted_date,
+                    'cryptocurrency': cryptocurrencies,
+                    'title': title if title else "Unknown",
+                    'url': url,
+                    'text': article_text,
+                } 
+            ]
         }
+        
         
     def format_date(self, raw_date):
         try:
