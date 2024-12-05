@@ -27,7 +27,6 @@ const CryptoPage = () => {
     navigate(`/`);
   };
 
-
   let social_impressions = [];
   let social_source = {};
   let news_impressions = [];
@@ -68,8 +67,7 @@ const CryptoPage = () => {
     for (const key in state.info[date]) {
       sent_scores.push(state.info[date][key].sentiment);
     }
-    let avg_sent_score =
-      sent_scores.reduce((a, b) => a + b) / sent_scores.length;
+    let avg_sent_score = sent_scores.reduce((a, b) => a + b) / sent_scores.length;
 
     let date_object = new Date(date);
     let epoch_date = date_object.getTime();
@@ -148,7 +146,7 @@ const CryptoPage = () => {
 
         <div className="flex justify-center items-center text-5xl mb-11">
           <div className="mr-5">
-            <img style={{ height: 100, width: 100 }} src={`src/assets/${name}.svg`}></img>
+            <img style={{ height: 100, width: 100 }} src={`/${name}.svg`}></img>
           </div>
           <div>{name}</div>
         </div>
@@ -223,13 +221,11 @@ const CryptoPage = () => {
               </div>
               <div className="col-span-2 text-align mt-5">
                 <ul>
-                  {Object.entries({ ...social_source, ...news_source }).map(
-                    ([key, value]) => (
-                      <li key={key}>
-                        {key}: {value}
-                      </li>
-                    )
-                  )}
+                  {Object.entries({ ...social_source, ...news_source }).map(([key, value]) => (
+                    <li key={key}>
+                      {key}: {value}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
