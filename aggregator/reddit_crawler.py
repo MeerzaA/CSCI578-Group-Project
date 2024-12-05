@@ -84,6 +84,15 @@ class RedditCrawler:
         num_comments = 0
         day_idx = 0
         searched = 0
+        json_template = {
+            "source_name": "reddit",
+            "source_type": "social",
+            "date": "",
+            "cryptocurrency": "",
+            "title": "",
+            "url": "",
+            "text": ""
+        }
         for post in search_results:
             searched += 1
             # check post date
