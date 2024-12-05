@@ -20,7 +20,6 @@ const CryptoPage = () => {
 
   console.log(state);
 
-  const data = state.info[1].Sentiment;
 
   const news = {
     title: {
@@ -1576,9 +1575,6 @@ const CryptoPage = () => {
       <div className="m-5">
         <Button onClick={handleButtonClick}>Home</Button>
         <div className="text-center">{name}</div>
-        <div>
-          <h1>Data from database: {data}</h1>
-        </div>
         <div className="w-full grid grid-cols-4">
           <div></div>
           <div className="col-span-6 md:col-span-2">
