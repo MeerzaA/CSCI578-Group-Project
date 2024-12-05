@@ -5,7 +5,7 @@ import json
 import datetime
 import copy
 
-OUTPUT_DIR = "../scrape_results"
+OUTPUT_DIR = "../../scrape_results"
 MIN_COMMENTS = 20
 
 reddit = praw.Reddit(
