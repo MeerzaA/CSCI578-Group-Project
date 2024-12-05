@@ -12,6 +12,7 @@ firebase-debug.*.log*
 
 # Firebase config
 aggregator/crypto-board-csci578-firebase-adminsdk-srcrn-c7680a0a8d.json
+aggregator/crypto-board-csci578-firebase-adminsdk-srcrn-e7c778da94.json
 # Uncomment this if you'd like others to create their own Firebase project.
 # For a team working on the same Firebase project(s), it is recommended to leave
 # it commented so all members can deploy to the same project(s) in .firebaserc.

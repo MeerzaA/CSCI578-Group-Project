@@ -2,6 +2,8 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db  # Use this for Realime Database
 
+import os
+
 class FirebaseService:
     def __init__(self, name ):
         self.connection = self.connect_to_firebase()
@@ -21,8 +23,10 @@ class FirebaseService:
         
 
     def connect_to_firebase( self ):
-        # Firebase initialization logic
-        cred = credentials.Certificate('aggregator/crypto-board-csci578-firebase-adminsdk-srcrn-c7680a0a8d.json')
+   
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        cred_path = os.path.join(current_dir, 'crypto-board-csci578-firebase-adminsdk-srcrn-e7c778da94.json')
+        cred = credentials.Certificate(cred_path)
         firebase_admin.initialize_app(cred, {"databaseURL": "https://crypto-board-csci578-default-rtdb.firebaseio.com/"})
 
     def get_crypto_data(self):
@@ -45,9 +49,9 @@ class FirebaseService:
         else:
             return None, 0
         
-    def put_crypto_data( self, output_data ):
-        
+    def put_crypto_data(self, output_data):
         currency = output_data['currency']
+<<<<<<< Updated upstream
         date = output_data['date']
         del output_data['currency'] 
         del output_data['date']
@@ -57,8 +61,15 @@ class FirebaseService:
         ref.update( output_data )
         self.counts[currency][date] = current_count + 1
         
+=======
+        del output_data['currency']
+        current_count = self.counts[currency]
+        tag = currency + f"/{current_count+1}"
+        ref = db.reference(tag)
+        ref.set(output_data)  
+        self.counts[currency] += 1
+>>>>>>> Stashed changes
         print("New data has been added to the database.")
-
 
 
 

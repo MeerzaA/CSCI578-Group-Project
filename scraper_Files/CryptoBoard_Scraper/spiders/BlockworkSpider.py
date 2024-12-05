@@ -7,7 +7,7 @@ from scrapy.spiders import SitemapSpider
 
 """
 Method : 2
-The https://blockworks.co/robots.txt allows sitemap xml
+The https://blockworks.co/robots.txt has sitemap xml
 
 To Crawl this website we need to 
 
@@ -62,8 +62,9 @@ class BlockworkSpider(SitemapSpider):
     }
 
     custom_settings = {
-        'CLOSESPIDER_ITEMCOUNT': 5, # Max pages per job
         
+        'CLOSESPIDER_ITEMCOUNT': 2, 
+
         'AUTOTHROTTLE_ENABLED': True,
         'AUTOTHROTTLE_START_DELAY': 1.0,  
         'AUTOTHROTTLE_MAX_DELAY': 10.0, 
@@ -74,16 +75,16 @@ class BlockworkSpider(SitemapSpider):
         'FEED_EXPORT_ENCODING': 'utf-8',
         
         'DELTAFETCH_ENABLED': True,
-        'DELTAFETCH_DIR': 'deltafetch_cache',
+        'DELTAFETCH_DIR': 'visites',
     }
 
     def parse_article(self, response):
+        
         url = response.url
         self.logger.info(f"Processing article: {url}")
 
         source_name = "Blockworks"
         source_type = "news"
-
 
         raw_date = response.xpath('/html/body/div[1]/div/main/section[1]/div[1]/article/div[1]/div[2]/div/div[2]/time/text()').get()
         formatted_date = self.format_date(raw_date) if raw_date else "Unknown"
@@ -96,19 +97,22 @@ class BlockworkSpider(SitemapSpider):
 
         cryptocurrencies = self.extract_cryptocurrencies(article_text)
 
-
         if not cryptocurrencies:
             self.logger.info(f"Skipping article with no cryptocurrencies: {url}")
             return
 
         yield {
-            'source_name': source_name,
-            'source_type': source_type,
-            'date': formatted_date,
-            'cryptocurrency': cryptocurrencies,
-            'title': title if title else "Unknown",
-            'url': url,
-            'text': article_text,
+            "Scraped_Format": [
+                {
+                    'source_name': source_name,
+                    'source_type': source_type,
+                    'date': formatted_date,
+                    'cryptocurrency': cryptocurrencies,
+                    'title': title if title else "Unknown",
+                    'url': url,
+                    'text': article_text,
+                }
+            ]
         }
         
     def format_date(self, raw_date):

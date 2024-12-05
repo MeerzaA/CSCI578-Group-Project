@@ -51,6 +51,8 @@ DOWNLOADER_MIDDLEWARES = {
     'CryptoBoard_Scraper.middlewares.RotateUserAgentMiddleware': 400,
     'CryptoBoard_Scraper.middlewares.RetryOn429Middleware': 420,
     'CryptoBoard_Scraper.middlewares.DelayRequestsMiddleware': 430,
+    'scrapy_deltafetch.DeltaFetch': 100,
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
 }
 
 
@@ -70,9 +72,9 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    "CryptoBoard_Scraper.pipelines.CryptoboardScraperPipeline": 300,
-#}
+ITEM_PIPELINES = {
+    "CryptoBoard_Scraper.pipelines.CryptoboardScraperPipeline": 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

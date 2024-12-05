@@ -5,7 +5,8 @@ class DataPipe:
     class OutputDataPipe:
 
         def write( self, item ):
-           self.queue.append( item ) 
+            print("\n\n\nWROTE ITEM TO PIPE\n\n\n")
+            self.queue.append( item ) 
 
         def __init__( self, queue ):
             self.queue = queue

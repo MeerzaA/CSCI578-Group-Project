@@ -1,4 +1,5 @@
 import sys
+
 from aggregator.FireBase import FirebaseService
 from aggregator.data_pipe import DataPipe
 from aggregator.sentiment_analysis import Aggregator
@@ -17,9 +18,15 @@ def main():
     # Totally dumb and synchronous for now. Just create the pipe and put hard-coded data on it. Then
     # read the data from the queue, perform sentiment analysis and write the output to the database.
     #
+    
+    #Spiders 
+    #Blockworks Spider 
+
+    
     crawler_pipe = DataPipe( "CrawlerPipe" )
     ds = Crawler( "Crawler", crawler_pipe.output_pipe )
-    firebase = FirebaseService( "FirebaseService" )
+    #firebase = FirebaseService( "FirebaseService" )
+    firebase = None
     agg = Aggregator( "Aggregator", crawler_pipe.input_pipe, firebase )
     
     ds.run()
