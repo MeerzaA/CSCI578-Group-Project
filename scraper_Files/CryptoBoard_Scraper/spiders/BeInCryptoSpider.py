@@ -106,10 +106,8 @@ class BeInCrryptoSpider(scrapy.Spider):
         source_name = "BeInCrypto"
         source_type = "news"
 
-        # If we passed the date from the listing page
         formatted_date = response.meta.get('publication_date', 'Unknown')
 
-        # Extract title and text
         title = response.xpath('//article//header//h1/text()').get()
         title = title.strip() if title else "Unknown"
 
