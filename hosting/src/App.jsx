@@ -7,7 +7,7 @@ import "./Styles/App.css";
 //pages
 import CryptoPage from './pages/CryptoPage';
 import Home from './pages/Home';
-import AuthPage from "./pages/AuthPage";
+/*import AuthPage from "./pages/AuthPage";*/
 
 function App() {
   return (
@@ -17,7 +17,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home/>} />
             <Route path="/:name" element={<CryptoPage />} />
-            <Route path="/auth" element={<AuthPage />} />
           </Routes>
         </div>
       </Router>

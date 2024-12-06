@@ -8,9 +8,12 @@ from threading import Thread
 #scrapy 
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
+
 # Spiders
 from scraper_Files.CryptoBoard_Scraper.spiders.BlockworkSpider import BlockworkSpider
 from scraper_Files.CryptoBoard_Scraper.spiders.DecryptSpider import DecryptSpider
+from scraper_Files.CryptoBoard_Scraper.spiders.BeInCryptoSpider import BeInCrryptoSpider
+
 #reddit
 from aggregator.reddit_crawler import RedditCrawler
 
@@ -35,7 +38,8 @@ class Crawler:
         self.crawler_process = CrawlerProcess(get_project_settings()) 
         self.crawler_process.crawl(BlockworkSpider, out_pipe=self.out_pipe)  
         self.crawler_process.crawl(DecryptSpider, out_pipe=self.out_pipe)
- 
+        self.crawler_process.crawl(BeInCrryptoSpider, out_pipe=self.out_pipe)
+        
         # Run Scrapy crawl process 
         self._scrapy_thread = Thread(target=self._start_scrapy_crawl)
         self._scrapy_thread.start()

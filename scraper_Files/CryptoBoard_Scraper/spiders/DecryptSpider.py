@@ -4,17 +4,18 @@ from scrapy.spiders import SitemapSpider
 
 """
 Method : 2
-The https://blockworks.co/robots.txt allows sitemap xml
+The https://decrypt.co/robots.txt allows sitemap xml
 
 To Crawl this website we need to 
 
-1: go to https://blockworks.co/search
-2: find sitemap.xml for news https://blockworks.co/news-sitemap-index.xml
+1: go to https://decrypt.co/robots.txt
+2: find sitemap.xml for news https://decrypt.co/news-sitemap-index.xml
 3: visit every sub sitemap in sitemap xml
 4: obey robots.txt, use roataing useragent in settings, limit pages downloaded to 20
 5: enable deltafetch extension to prevent re-visiting articles already tracked
 6: log every website before parsing for debugging 
-7: we than parse for...
+7: search for bread crumbs that match a news page 
+8: we than parse for...
     {
     'source_name': websiter name 
     'source_type': news or social
@@ -25,7 +26,7 @@ To Crawl this website we need to
     'text': all article text 
 }
 
-8: finally send the parsed data to the aggregator
+9: finally send the parsed data to the aggregator
 
 """
 
@@ -66,7 +67,7 @@ class DecryptSpider(SitemapSpider):
     
     custom_settings = {
         
-#        'CLOSESPIDER_ITEMCOUNT': 20,
+        #'CLOSESPIDER_ITEMCOUNT': 2,
         'CONCURRENT_REQUESTS': 8, 
 
         'AUTOTHROTTLE_ENABLED': True,
