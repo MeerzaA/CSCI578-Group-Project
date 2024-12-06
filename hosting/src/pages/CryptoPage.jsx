@@ -60,6 +60,13 @@ const CryptoPage = () => {
     news_impressions.push([epoch_date, news_counter]);
   }
 
+
+  // TODO: Decide if we want to remove preceding zeros in graphs
+  const firstNonZeroIndex = social_impressions.findIndex(item => item[1] !== 0);
+  if (firstNonZeroIndex !== -1){
+    social_impressions = social_impressions.slice(firstNonZeroIndex)
+  }
+
   let avg_sent_scores = [];
 
   for (const date in state.info) {
