@@ -38,7 +38,7 @@ class FirebaseService:
     
     def connect_to_firebase(self):
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        cred_path = os.path.join(current_dir,'crypto-board-csci578-firebase-adminsdk-srcrn-c7680a0a8d.json')
+        cred_path = os.path.join(current_dir,'crypto-board-csci578-firebase-adminsdk-srcrn-e7c778da94.json')
         cred = credentials.Certificate(cred_path)
         firebase_admin.initialize_app(cred, {"databaseURL": "https://crypto-board-csci578-default-rtdb.firebaseio.com/"})
         self.logger.info("Connected to Firebase.")
