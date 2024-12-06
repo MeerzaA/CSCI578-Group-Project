@@ -64,7 +64,7 @@ class BeInCrryptoSpider(scrapy.Spider):
 
     custom_settings = {
         
-#        'CLOSESPIDER_ITEMCOUNT': 2,
+        #'CLOSESPIDER_ITEMCOUNT': 2, # limit for testing only
         'CONCURRENT_REQUESTS': 8, 
 
         'AUTOTHROTTLE_ENABLED': True,
@@ -80,7 +80,7 @@ class BeInCrryptoSpider(scrapy.Spider):
     }
 
     def parse(self, response):
-        # Select all article blocks
+  
         articles = response.css('div[data-el="bic-c-news-big"]')
         for article in articles:
             link = article.css('a::attr(href)').get()
