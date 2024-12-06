@@ -1,5 +1,5 @@
 # For more information, please refer to https://aka.ms/vscode-docker-python
-FROM node:lts-slim
+FROM node:22.11-slim
 ARG BUILD_DATE
 ARG VERSION
 ARG VCS_REF
@@ -21,6 +21,7 @@ EXPOSE 9000
 EXPOSE 9005
 EXPOSE 9099
 EXPOSE 9199
+EXPOSE 5173
 SHELL ["/bin/bash", "-c"]
 
 # Keeps Python from generating .pyc files in the container
@@ -75,4 +76,4 @@ VOLUME $HOME/.cache
 USER root
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-CMD ["bash"]  
+CMD ["bash", "-c", "./cryptoboard.sh"]  
