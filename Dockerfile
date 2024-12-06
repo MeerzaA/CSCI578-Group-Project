@@ -21,7 +21,6 @@ EXPOSE 9000
 EXPOSE 9005
 EXPOSE 9099
 EXPOSE 9199
-EXPOSE 5173
 SHELL ["/bin/bash", "-c"]
 
 # Keeps Python from generating .pyc files in the container
@@ -41,6 +40,10 @@ RUN backend/bin/python3 -m pip install -q firebase_admin
 RUN backend/bin/python3 -m pip install -q stanza
 RUN backend/bin/python3 -m pip install -q stanfordnlp
 RUN backend/bin/python3 -m pip install -q sentencepiece
+RUN backend/bin/python3 -m pip install -q praw
+RUN backend/bin/python3 -m pip install -q scrapy
+#RUN backend/bin/python3 -m pip install -q scrapy-datafetch
+
 RUN npm install -g firebase-tools@${VERSION} typescript 
 RUN npm cache clean --force
 RUN firebase setup:emulators:database 
@@ -53,13 +56,15 @@ RUN java -version
 RUN chown -R node:node $HOME
 RUN apt-get install -y sudo
 RUN apt-get install -y vim
+    
+
 ENV HOME=/app
 
+# Set up frontend hosting
 COPY . $HOME 
 WORKDIR $HOME/hosting
 RUN npm install
-RUN npm run build 
-    
+RUN npm run build
 
 WORKDIR $HOME
 VOLUME $HOME/.cache
@@ -70,5 +75,4 @@ VOLUME $HOME/.cache
 USER root
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-CMD ["bash"]
-#CMD ["bash", "-c", "./frontend.sh"]  
+CMD ["bash"]  
