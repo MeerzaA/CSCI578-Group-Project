@@ -33,10 +33,13 @@ http://localhost:5173
 
 ## Description of source code
 Backend:
-- The aggregator component consists of four subcomponents: FireBase.py, sentiment_analysis.py, and reddit_crawler.py.
-- Firebase.py is responsible for establishing the connection between the instance and the Firebase database, as well as getting and setting data. 
-- sentiment_analysis.py is responsible for various tasks, including sentence summarizer, sentiment analyzer, and various text processors 
-- Redditcrawler.py uses the PRAW library to search the CryptoCurrency subreddit for recent posts and comments that mention a particular cryptocurrency.  
+- The aggregator module consists of FireBase.py and sentiment_analysis.py.
+    - Firebase.py is responsible for establishing the connection between the instance and the Firebase database, as well as getting and setting data. 
+    - sentiment_analysis.py is responsible for various tasks, including sentence summarizer, sentiment analyzer, and various text processors 
+- The scraper module consists of two types of scrapers - Scrapy for news sources and PRAW for reddit.
+    - We use Scrapy to scrape two news sources for data about various cryptocurrencies
+    - We use the PRAW library to scrape Reddit's CryptoCurrency subreddit for recent posts and comments that mention a particular cryptocurrency
+    
 Frontend:
 - The frontend was made using React and Vite, and mainly lives in the hosting directory.
 - Within the subdirectory are various components necessary to make the frontend, such as firebase, which is responsible for establishing a connection with the database for the frontend.
