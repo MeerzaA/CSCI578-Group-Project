@@ -8,6 +8,7 @@ from threading import Thread
 #scrapy 
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
+
 # Spiders
 from scraper_Files.CryptoBoard_Scraper.spiders.BlockworkSpider import BlockworkSpider
 from scraper_Files.CryptoBoard_Scraper.spiders.DecryptSpider import DecryptSpider
@@ -35,8 +36,8 @@ class Crawler:
         settings_file_path = 'scraper_Files.CryptoBoard_Scraper.settings' # The path seen from root, ie. from backend.py
         os.environ.setdefault('SCRAPY_SETTINGS_MODULE', settings_file_path)
         self.crawler_process = CrawlerProcess(get_project_settings()) 
-        #self.crawler_process.crawl(BlockworkSpider, out_pipe=self.out_pipe)  
-        #self.crawler_process.crawl(DecryptSpider, out_pipe=self.out_pipe)
+        self.crawler_process.crawl(BlockworkSpider, out_pipe=self.out_pipe)  
+        self.crawler_process.crawl(DecryptSpider, out_pipe=self.out_pipe)
         self.crawler_process.crawl(BeInCrryptoSpider, out_pipe=self.out_pipe)
         
         # Run Scrapy crawl process 
@@ -44,8 +45,8 @@ class Crawler:
         self._scrapy_thread.start()
 
         # Run the Reddit crawling process.
-        #self._redditCrawlThread = Thread(target=self._start_reddit_crawler)
-        #self._redditCrawlThread.start()
+        self._redditCrawlThread = Thread(target=self._start_reddit_crawler)
+        self._redditCrawlThread.start()
 
     def _start_scrapy_crawl(self):
         """Internal method to run the Scrapy crawler in the background."""
@@ -56,8 +57,8 @@ class Crawler:
     def _start_reddit_crawler(self):
         """Internal method to run the Reddit crawler in the background."""
         print("Reddit crawling started.")
-        #reddit_crawler = RedditCrawler()
-        #reddit_crawler.crawl(self.send)
+        reddit_crawler = RedditCrawler()
+        reddit_crawler.crawl(self.send)
         print("Reddit crawling completed.")
         
 #TODO: move to config file

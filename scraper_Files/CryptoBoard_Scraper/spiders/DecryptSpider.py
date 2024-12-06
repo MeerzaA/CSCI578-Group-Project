@@ -67,7 +67,7 @@ class DecryptSpider(SitemapSpider):
     
     custom_settings = {
         
-#        'CLOSESPIDER_ITEMCOUNT': 20,
+#        'CLOSESPIDER_ITEMCOUNT': 2,
         'CONCURRENT_REQUESTS': 8, 
 
         'AUTOTHROTTLE_ENABLED': True,

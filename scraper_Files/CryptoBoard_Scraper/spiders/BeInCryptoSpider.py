@@ -30,11 +30,6 @@ To Crawl this website we need to
 
 """
 
-'''    def __init__(self, *args, **kwargs ):
-        super().__init__(*args, **kwargs)
-        self.out_pipe = kwargs['out_pipe']
-'''
-
 class BeInCrryptoSpider(scrapy.Spider):
     
     def __init__(self, *args, **kwargs ):
@@ -69,7 +64,7 @@ class BeInCrryptoSpider(scrapy.Spider):
 
     custom_settings = {
         
-#        'CLOSESPIDER_ITEMCOUNT': 20,
+#        'CLOSESPIDER_ITEMCOUNT': 2,
         'CONCURRENT_REQUESTS': 8, 
 
         'AUTOTHROTTLE_ENABLED': True,
@@ -96,14 +91,13 @@ class BeInCrryptoSpider(scrapy.Spider):
                 request.meta['publication_date'] = formatted_date
                 yield request
 
-        # Pagination
         current_page = response.url.rstrip('/').split('/')[-1]
         if not current_page.isdigit():
             current_page = "1"
         next_page = int(current_page) + 1
-        if next_page <= 2005:
-            next_page_url = f'https://beincrypto.com/news/page/{next_page}/'
-            yield response.follow(next_page_url, callback=self.parse)
+
+        next_page_url = f'https://beincrypto.com/news/page/{next_page}/'
+        yield response.follow(next_page_url, callback=self.parse)
 
     def parse_article(self, response):
         url = response.url
@@ -143,7 +137,6 @@ class BeInCrryptoSpider(scrapy.Spider):
         }
 
     def format_date(self, raw_date):
-        """Format date from raw string (like 'Dec 6, 2024')"""
         try:
             date = datetime.strptime(raw_date.strip(), "%b %d, %Y")
         except ValueError:
@@ -152,7 +145,6 @@ class BeInCrryptoSpider(scrapy.Spider):
         return date.strftime("%Y-%m-%d")
 
     def extract_cryptocurrencies(self, text):
-        """Extract cryptocurrencies mentioned in the article"""
         mentioned_cryptos = []
         for key, value in self.CRYPTO_LIST.items():
             if key.lower() in text.lower():
